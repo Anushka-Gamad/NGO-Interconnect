@@ -19,7 +19,7 @@
                 <nav class="nav nav-masthead justify-content-center float-md-end">
                     <a class="nav-link active" href="#">Home</a>
                     <a class="nav-link" href="/drives">Drives</a>
-                    <% if (!currentUser) { %>
+                    <% if (!userLoggedIn) { %>
                         <a class="nav-link" href="/login">Login</a>
                         <a class="nav-link" href="/register">Register</a>
                     <% } else { %>
