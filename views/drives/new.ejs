@@ -1,0 +1,56 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <h1 class="text-center">Add Drive</h1>
+    <div class="col-md-6 offset-md-3">
+        <form action="/drives" method="post" novalidate class="validated-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" type="text" id="title" placeholder="Enter Name"
+                    name="drive[title]" required>
+                <div class="valid-feedback">
+                    Looks Good!!
+                </div>
+                <div class="invalid-feedback">
+                    Name Required
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">Venue</label>
+                <input class="form-control" type="text" id="location" placeholder="Enter venue"
+                    name="drive[venue]" required>
+                <div class="valid-feedback">
+                    Looks Good!!
+                </div>
+                <div class="invalid-feedback">
+                    Venue Required
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="time">Time</label>
+                <input class="form-control" type="text" id="time" placeholder="Enter time"
+                    name="drive[time]" required>
+                <div class="valid-feedback">
+                    Looks Good!!
+                </div>
+                <div class="invalid-feedback">
+                    Time Required
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" type="text" id="description" placeholder="Enter description"
+                    name="drive[description]" required></textarea>
+                <div class="valid-feedback">
+                    Looks Good!!
+                </div>
+                <div class="invalid-feedback">
+                    Give Description
+                </div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-success">Add Drive</button>
+            </div>
+        </form>
+        <a href="/drives">Cancel</a>
+    </div>
+</div>

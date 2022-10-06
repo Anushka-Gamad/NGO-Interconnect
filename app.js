@@ -24,8 +24,28 @@ app.get("/login", (req,res) => {
     res.render("user/login");
 })
 
+app.post("/login", (req,res)=>{
+    res.send("Login post request received");
+})
+
 app.get("/register", (req,res) => {
     res.render("user/register");
+})
+
+app.post("/register", (req,res)=>{
+    res.send("Register post request received");
+})
+
+app.get("/drives", (req,res) => {
+    res.render('drives/index')
+})
+
+app.post("/drives", (req,res) =>{
+    res.send("Adding new drive")
+})
+
+app.get("/drives/new", (req,res)=>{
+    res.render("drives/new")
 })
 
 app.get("/", (req,res) => {
