@@ -27,7 +27,24 @@ app.get("/login", (req,res) => {
 })
 
 app.post("/login", async(req,res)=>{
-    res.send("Login post request received");
+    console.log("Login post request received");
+    try{
+        const {username, password } = req.body;
+        const user = await client.query(
+            "select * from superuser where user_name = $1",[username]
+        )
+        if (user.user_name && user.password){
+            if(user.password == password){
+                res.send("User Logged In")
+            }else{
+                res.send("Incorrect password")
+            }
+        }else if(!user.user_name){
+            res.render('/register');
+        }
+    }catch(e){
+        console.error(e.message)
+    }
 })
 
 app.get("/register", (req,res) => {
@@ -37,9 +54,9 @@ app.get("/register", (req,res) => {
 app.post("/register", (req,res)=>{
     const {typeOfUser} = req.body;
     if(typeOfUser == "ngo"){
-        res.render("user/registerNGO")
+        res.render("user/ngoRegistration")
     }else{
-        res.render("user/registerUser")
+        res.render("user/personRegistration")
     }
     
 })
@@ -48,7 +65,7 @@ app.post("/registerNGO", async(req,res)=>{
     try{
         const {username, email, password } = req.body;
         await client.query(
-            "insert into super_user (username, user_password) values($1, $2) returning *", [username,password]
+            "insert into superuser (user_name, user_password) values($1, $2);", [username,password]
         )
         await client.query(
             "insert into ngo (ngo_mail) values($1) returning *", [email]
@@ -63,10 +80,10 @@ app.post("/registerUser", async(req,res)=>{
     try{
         const {username, email, password, firstname, lastname } = req.body;
         const newUser = await client.query(
-            "insert into super_user (username, user_password) values($1, $2);", [username, password]
+            "insert into superuser (user_name, user_password , type_user) values($1, $2 , 1) ;", [username, password]
         )
         await client.query(
-            "insert into person (user_first_name, user_last_name, user_mail) values($1, $2, $3);", [firstname, lastname, email]
+            "insert into person (user_name , user_first_name, user_last_name, user_mail) values($1, $2, $3, $4, $5);", [username, firstname, lastname, email]
         )
     }catch(e){
         console.error(e.message)
