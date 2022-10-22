@@ -35,7 +35,8 @@ app.post("/login", async(req,res)=>{
         )
         if (user.user_name && user.password){
             if(user.password == password){
-                res.send("User Logged In")
+                res.render('/person-profile');
+                
             }else{
                 res.send("Incorrect password")
             }
@@ -49,6 +50,9 @@ app.post("/login", async(req,res)=>{
 
 app.get("/register", (req,res) => {
     res.render("user/register");
+})
+app.get("/person-profile", (req,res) => {
+    res.render("user/person-profile");
 })
 
 app.post("/register", (req,res)=>{
@@ -95,9 +99,11 @@ app.get("/drives", (req,res) => {
     res.render('drives/index')
 })
 
+
 app.post("/drives", (req,res) =>{
     res.send("Adding new drive")
 })
+
 
 app.get("/drives/new", (req,res)=>{
     res.render("drives/new")
