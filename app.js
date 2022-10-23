@@ -52,13 +52,13 @@ app.get("/register", (req,res) => {
     res.render("user/register");
 })
 app.get("/person-profile", (req,res) => {
-    res.render("user/person-profile");
+    res.render("ngo/ngo-profile");
 })
 
 app.post("/register", (req,res)=>{
     const {typeOfUser} = req.body;
     if(typeOfUser == "ngo"){
-        res.render("user/ngoRegistration")
+        res.render("ngo/ngoRegistration")
     }else{
         res.render("user/personRegistration")
     }
@@ -67,32 +67,34 @@ app.post("/register", (req,res)=>{
 
 app.post("/registerNGO", async(req,res)=>{
     try{
-        const {username, email, password } = req.body;
-        await client.query(
-            "insert into superuser (user_name, user_password) values($1, $2);", [username,password]
-        )
-        await client.query(
-            "insert into ngo (ngo_mail) values($1) returning *", [email]
-        )
+        const {username, password, ngoName, ngoMail, organization, phoneNumber, govtId, add1, add2, city, state, zipCode} = req.body;
+        res.send(username +" "+ password +" "+ ngoName +" "+ ngoMail +" "+ organization +" "+ phoneNumber +" "+ govtId +" "+ add1 +" "+ add2 +" "+ city +" "+ state +" "+ zipCode)
+        // await client.query(
+        //     "insert into superuser (user_name, user_password) values($1, $2);", [username,password]
+        // )
+        // await client.query(
+        //     "insert into ngo (ngo_mail) values($1) returning *", [email]
+        // )
     }catch(e){
         console.error(e.message)
     }
-    res.redirect('/drives')
+    // res.redirect('/drives')
 })
 
 app.post("/registerUser", async(req,res)=>{
     try{
-        const {username, email, password, firstname, lastname } = req.body;
-        const newUser = await client.query(
-            "insert into superuser (user_name, user_password , type_user) values($1, $2 , 1) ;", [username, password]
-        )
-        await client.query(
-            "insert into person (user_name , user_first_name, user_last_name, user_mail) values($1, $2, $3, $4, $5);", [username, firstname, lastname, email]
-        )
+        const {username, password, firstName, middleName, lastName, email, phnNumber, gender, aadhaar, dateOfBirth, add1, add2, city, state, zipCode} = req.body;
+        res.send(req.body)
+        // const newUser = await client.query(
+        //     "insert into superuser (user_name, user_password , type_user) values($1, $2 , 1);", [username, password]
+        // )
+        // await client.query(
+        //     "insert into person (user_name , user_first_name, user_last_name, user_mail) values($1, $2, $3, $4, $5);", [username, firstName, lastName, email]
+        // )
     }catch(e){
         console.error(e.message)
     }
-    res.redirect('/drives')
+    // res.redirect('/drives')
 })
 
 app.get("/drives", (req,res) => {
