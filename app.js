@@ -51,8 +51,13 @@ app.post("/login", async(req,res)=>{
 app.get("/register", (req,res) => {
     res.render("user/register");
 })
-app.get("/person-profile", (req,res) => {
+
+app.get("/ngo-profile", (req,res) => {
     res.render("ngo/ngo-profile");
+})
+
+app.get("/person-profile", (req,res) => {
+    res.render("user/person-profile");
 })
 
 app.post("/register", (req,res)=>{
