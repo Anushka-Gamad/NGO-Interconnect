@@ -1,56 +1,98 @@
 <% layout('layouts/boilerplate') %>
-<div class="row">
-    <h1 class="text-center">Add Drive</h1>
-    <div class="col-md-6 offset-md-3">
-        <form action="/drives" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" placeholder="Enter Name"
-                    name="drive[title]" required>
-                <div class="valid-feedback">
-                    Looks Good!!
+
+    <div class="row">
+        <h1 class="text-center">Add Drive</h1>
+        <div class="col-md-6 offset-md-3">
+            <form action="/drives" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+
+                <div class="row">
+                <div class="col-md-8">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" placeholder="Enter Name" name="drive[title]"
+                        required>
+                    <div class="valid-feedback">
+                        Looks Good!!
+                    </div>
+                    <div class="invalid-feedback">
+                        Name Required
+                    </div>
                 </div>
-                <div class="invalid-feedback">
-                    Name Required
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="location">Venue</label>
-                <input class="form-control" type="text" id="location" placeholder="Enter venue"
-                    name="drive[venue]" required>
-                <div class="valid-feedback">
-                    Looks Good!!
-                </div>
-                <div class="invalid-feedback">
-                    Venue Required
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="time">Time</label>
-                <input class="form-control" type="text" id="time" placeholder="Enter time"
-                    name="drive[time]" required>
-                <div class="valid-feedback">
-                    Looks Good!!
-                </div>
-                <div class="invalid-feedback">
-                    Time Required
+                <div class="dropdown mb-3 ">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Drive Type
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#">Health</a></li>
+                        <li><a class="dropdown-item" href="#">Education</a></li>
+                        <li><a class="dropdown-item" href="#">Nature</a></li>
+                        <li><a class="dropdown-item" href="#">Others</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="description" placeholder="Enter description"
-                    name="drive[description]" required></textarea>
-                <div class="valid-feedback">
-                    Looks Good!!
+                <div class="mb-3">
+                    <label class="form-label" for="location">Venue</label>
+                    <input class="form-control" type="text" id="location" placeholder="Enter venue" name="drive[venue]"
+                        required>
+                    <div class="valid-feedback">
+                        Looks Good!!
+                    </div>
+                    <div class="invalid-feedback">
+                        Venue Required
+                    </div>
                 </div>
-                <div class="invalid-feedback">
-                    Give Description
+                <div class="mb-3">
+                    <label class="form-label" for="date">Date</label>
+                    <input class="form-control" type="date" id="date" placeholder="Enter Date"
+                        name="drive[date]" required>
+                    <div class="valid-feedback">
+                        Looks Good!!
+                    </div>
+                    <div class="invalid-feedback">
+                        Date Required
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <button class="btn btn-success">Add Drive</button>
-            </div>
-        </form>
-        <a href="/drives">Cancel</a>
+
+                <div class="mb-3">
+                    <label class="form-label" for="time">Time</label>
+                    <input class="form-control" type="text" id="time" placeholder="Enter time" name="drive[time]"
+                        required>
+                    <div class="valid-feedback">
+                        Looks Good!!
+                    </div>
+                    <div class="invalid-feedback">
+                        Time Required
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="manager">Drive Manager</label>
+                    <input class="form-control" type="text" id="manager" placeholder="Enter Name" name="drive[manager]"
+                        required>
+                    <div class="valid-feedback">
+                        Looks Good!!
+                    </div>
+                    <div class="invalid-feedback">
+                        Name Required
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" placeholder="Enter description"
+                        name="drive[description]" required></textarea>
+                    <div class="valid-feedback">
+                        Looks Good!!
+                    </div>
+                    <div class="invalid-feedback">
+                        Give Description
+                    </div>
+                </div>
+              
+                <div class="mb-3">
+                    <button class="btn btn-success">Add Drive</button>
+                </div>
+            </form>
+            <a href="/drives">Cancel</a>
+        </div>
     </div>
-</div>
