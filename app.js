@@ -68,33 +68,35 @@ app.post("/register", (req,res)=>{
 app.post("/registerNGO", async(req,res)=>{
     try{
         const {username, password, ngoName, ngoMail, organization, phoneNumber, govtId, add1, add2, city, state, zipCode} = req.body;
-        res.send(username +" "+ password +" "+ ngoName +" "+ ngoMail +" "+ organization +" "+ phoneNumber +" "+ govtId +" "+ add1 +" "+ add2 +" "+ city +" "+ state +" "+ zipCode)
-        // await client.query(
-        //     "insert into superuser (user_name, user_password) values($1, $2);", [username,password]
-        // )
-        // await client.query(
-        //     "insert into ngo (ngo_mail) values($1) returning *", [email]
-        // )
+        // res.send(username +" "+ password +" "+ ngoName +" "+ ngoMail +" "+ organization +" "+ phoneNumber +" "+ govtId +" "+ add1 +" "+ add2 +" "+ city +" "+ state +" "+ zipCode)
+        await client.query(
+            "insert into superuser (user_name, user_password, type_user) values($1, $2, $3);", [username,password,'N']
+        )
+        await client.query(
+            "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);", [govtId, username, ngoName, phoneNumber, organization, ngoMail, add1+" "+add2, city, state, zipCode]
+        )
     }catch(e){
         console.error(e.message)
     }
-    // res.redirect('/drives')
+    res.redirect('/drives')
 })
 
 app.post("/registerUser", async(req,res)=>{
     try{
         const {username, password, firstName, middleName, lastName, email, phnNumber, gender, aadhaar, dateOfBirth, add1, add2, city, state, zipCode} = req.body;
-        res.send(req.body)
-        // const newUser = await client.query(
-        //     "insert into superuser (user_name, user_password , type_user) values($1, $2 , 1);", [username, password]
-        // )
-        // await client.query(
-        //     "insert into person (user_name , user_first_name, user_last_name, user_mail) values($1, $2, $3, $4, $5);", [username, firstName, lastName, email]
-        // )
+        var bday = +new Date(dateOfBirth)
+        var age = ~~((Date.now() - bday)/(31557600000));
+        const newUser = await client.query(
+            "insert into superuser (user_name, user_password , type_user) values($1, $2 , $3);", [username, password, 'P']
+        )
+        await client.query(
+            "insert into person values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);", [username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email, add1+" "+add2, city, state, zipCode]
+            // (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code)
+        )
     }catch(e){
         console.error(e.message)
     }
-    // res.redirect('/drives')
+    res.redirect('/drives')
 })
 
 app.get("/drives", (req,res) => {
