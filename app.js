@@ -61,47 +61,18 @@ app.post("/register", (req,res)=>{
     }
 })
 
-app.get("/registerNGO", (req,res)=>{
-    const user = {
-        username: "",
-        password: "",
-        ngoName: "",
-        ngoMail: "",
-        organization: "",
-        phoneNumber:"",
-        govtId:"",
-        add1:"",
-        add2:"",
-        city:"",
-        state:"",
-        zipCode:""
-    }
-    
+app.get("/registerNGO", (req,res)=>{  
     res.render("ngo/ngoRegistration", {user})
 })
 
 app.post("/registerNGO", async(req,res)=>{
     const {username, password, ngoName, ngoMail, organization, phoneNumber, govtId, add1, add2, city, state, zipCode} = req.body;
-    const user = {
-        username,
-        password,
-        ngoName,
-        ngoMail,
-        organization,
-        phoneNumber,
-        govtId,
-        add1,
-        add2,
-        city,
-        state,
-        zipCode
-    }
     try{
         var existing = await client.query(
             "select * from superuser where user_name = $1", [username]
         )
         if(existing.rows.length > 0){
-            res.redirect('/registerNGO', {user})
+            res.redirect('/registerNGO')
         }else{
             await client.query(
                 "insert into superuser (user_name, user_password, type_user) values($1, $2, $3);", [username,password,'N']
