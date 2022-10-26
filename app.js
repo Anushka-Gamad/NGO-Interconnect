@@ -52,38 +52,72 @@ app.get("/register", (req,res) => {
     res.render("user/register");
 })
 
-app.get("/ngo-profile", (req,res) => {
-    res.render("ngo/ngo-profile");
-})
-
-app.get("/person-profile", (req,res) => {
-    res.render("user/person-profile");
-})
-
 app.post("/register", (req,res)=>{
     const {typeOfUser} = req.body;
     if(typeOfUser == "ngo"){
-        res.render("ngo/ngoRegistration")
+        res.redirect("/registerNGO")
     }else{
-        res.render("user/personRegistration")
+        res.redirect("/registerUser")
+    }
+})
+
+app.get("/registerNGO", (req,res)=>{
+    const user = {
+        username: "",
+        password: "",
+        ngoName: "",
+        ngoMail: "",
+        organization: "",
+        phoneNumber:"",
+        govtId:"",
+        add1:"",
+        add2:"",
+        city:"",
+        state:"",
+        zipCode:""
     }
     
+    res.render("ngo/ngoRegistration", {user})
 })
 
 app.post("/registerNGO", async(req,res)=>{
+    const {username, password, ngoName, ngoMail, organization, phoneNumber, govtId, add1, add2, city, state, zipCode} = req.body;
+    const user = {
+        username,
+        password,
+        ngoName,
+        ngoMail,
+        organization,
+        phoneNumber,
+        govtId,
+        add1,
+        add2,
+        city,
+        state,
+        zipCode
+    }
     try{
-        const {username, password, ngoName, ngoMail, organization, phoneNumber, govtId, add1, add2, city, state, zipCode} = req.body;
-        // res.send(username +" "+ password +" "+ ngoName +" "+ ngoMail +" "+ organization +" "+ phoneNumber +" "+ govtId +" "+ add1 +" "+ add2 +" "+ city +" "+ state +" "+ zipCode)
-        await client.query(
-            "insert into superuser (user_name, user_password, type_user) values($1, $2, $3);", [username,password,'N']
+        var existing = await client.query(
+            "select * from superuser where user_name = $1", [username]
         )
-        await client.query(
-            "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);", [govtId, username, ngoName, organization, ngoMail, add1+" "+add2, city, state, zipCode, phoneNumber]
-        )
+        if(existing.rows.length > 0){
+            res.redirect('/registerNGO', {user})
+        }else{
+            await client.query(
+                "insert into superuser (user_name, user_password, type_user) values($1, $2, $3);", [username,password,'N']
+            )
+            await client.query(
+                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);", [govtId, username, ngoName, organization, ngoMail, add1+" "+add2, city, state, zipCode, phoneNumber]
+            )
+            res.redirect('/drives')
+        }
     }catch(e){
         console.error(e.message)
     }
-    res.redirect('/drives')
+})
+
+app.get("/registerUser", (req,res)=>{
+    res.render("user/personRegistration")
 })
 
 app.post("/registerUser", async(req,res)=>{
@@ -98,10 +132,12 @@ app.post("/registerUser", async(req,res)=>{
             var bday = +new Date(dateOfBirth)
             var age = ~~((Date.now() - bday)/(31557600000));
             await client.query(
-                "insert into superuser (user_name, user_password , type_user) values($1, $2 , $3);", [username, password, 'P']
+                "insert into superuser (user_name, user_password , type_user) values($1, $2 , $3);"
+                ,[username, password, 'P']
             )
             await client.query(
-                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);", [username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email, add1+" "+add2, city, state, zipCode]
+                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);"
+                ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email, add1+" "+add2, city, state, zipCode]
             )
             res.redirect('/drives')
         }
@@ -126,6 +162,15 @@ app.post("/drives", (req,res) =>{
 
 app.get("/drives/new", (req,res)=>{
     res.render("drives/new")
+})
+
+
+app.get("/ngo-profile", (req,res) => {
+    res.render("ngo/ngo-profile");
+})
+
+app.get("/person-profile", (req,res) => {
+    res.render("user/person-profile");
 })
 
 app.get("/", (req,res) => {

@@ -12,45 +12,85 @@
             </div>
             <div class="row mb-3">
                 <div class="form-group col-md-6">
-                    <input type="text" class="form-control" id="ngoName" placeholder="Name" name="ngoName" required>
+                    <% if (user.ngoName.length > 0) { %> 
+                        <input type="text" class="form-control" id="ngoName" placeholder="Name" value="<%= user.ngoName %> " name="ngoName" required>
+                    <% } else { %>
+                        <input type="text" class="form-control" id="ngoName" placeholder="Name" name="ngoName" required>    
+                    <% } %> 
                 </div>
-                <div class="form-group col-md-6">   
-                    <input type="mail" class="form-control" id="ngoMail" placeholder="Mail" name="ngoMail" required>
-                    <!-- <input type="password" class="form-control" id="ngoPassword" placeholder="Password" name="ngoPassword" required> -->
+                <div class="form-group col-md-6">
+                    <% if (user.ngoMail.length > 0) { %> 
+                        <input type="mail" class="form-control" id="ngoMail" placeholder="Mail" value=<%= ngoMail %>  name="ngoMail" required>
+                    <% } else { %>
+                        <input type="mail" class="form-control" id="ngoMail" placeholder="Mail" name="ngoMail" required>
+                    <% } %> 
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="inputOrganization" placeholder="Organization" name="organization">
+                    <% if (user.organization.length > 0) { %> 
+                        <input type="text" class="form-control" id="inputOrganization" placeholder="Organization" value=<%= user.organisation %> name="organization">
+                    <% } else { %>
+                        <input type="text" class="form-control" id="inputOrganization" placeholder="Organization" name="organization">
+                    <% } %> 
                 </div>
                 <div class="form-group col-md-4">
-                    <input type="number" class="form-control" id="inputPhone" placeholder="Phone Number" name="phoneNumber" required >
+                    <% if (user.phoneNumber.length > 0) { %> 
+                        <input type="number" class="form-control" id="inputPhone" placeholder="Phone Number" name="phoneNumber" value=<%= user.phoneNumber %>  required >
+                    <% } else { %>
+                        <input type="number" class="form-control" id="inputPhone" placeholder="Phone Number" name="phoneNumber" required >
+                    <% } %> 
                 </div>
                 <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="inputGovId" placeholder="Government Id" name="govtId" required>
+                    <% if (user.govtId.length > 0) { %> 
+                        <input type="text" class="form-control" id="inputGovId" placeholder="Government Id" value="user.govtId" name="govtId" required>
+                    <% } else { %>
+                        <input type="text" class="form-control" id="inputGovId" placeholder="Government Id" name="govtId" required>
+                    <% } %> 
                 </div>
             </div>
             
             <div class="form-group mb-3">
                 <label for="inputAddress">Address</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="add1" required>
+                <% if (user.add1.length > 0) { %> 
+                    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" value=<%= user.add1 %>  name="add1" required>
+                <% } else { %>
+                    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="add1" required>
+                <% } %> 
             </div>
             <div class="form-group mb-3">
                 <label for="inputAddress2">Address 2</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" name="add-2">
+                <% if (user.add2.length > 0) { %> 
+                    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" value=<%= user.add2 %>  name="add2">
+                <% } else { %>
+                    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" name="add2">
+                <% } %> 
             </div>
             <div class="row mb-3">
                 <div class="form-group col-md-6">
                     <label for="inputCity">City</label>
+                    <% if (user.city.length > 0) { %> 
+                        <input type="text" class="form-control" id="inputCity" name="city" placeholder="Indore" value="user.city" required>
+                    <% } else { %>
+                        <input type="text" class="form-control" id="inputGovId" placeholder="Government Id" name="govtId" required>
+                    <% } %> 
                     <input type="text" class="form-control" id="inputCity" name="city" placeholder="Indore" required>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="inputState">State</label>
-                    <input type="text" class="form-control" id="inputState" name="state" placeholder="Madhya Pradesh" required>
+                    <% if (user.state.length > 0) { %> 
+                        <input type="text" class="form-control" id="inputState" name="state" placeholder="Madhya Pradesh" value=<%= user.state %>  required>
+                    <% } else { %>
+                        <input type="text" class="form-control" id="inputState" name="state" placeholder="Madhya Pradesh" required>
+                    <% } %> 
                 </div>
                 <div class="form-group col-md-2">
                     <label for="inputZip">Zip</label>
-                    <input type="text" class="form-control" id="inputZip" name="zipCode" placeholder="452001" required>
+                    <% if (user.zipCode.length > 0) { %> 
+                        <input type="text" class="form-control" id="inputZip" name="zipCode" placeholder="452001" value=<%= user.zipCode %>  required>
+                    <% } else { %>
+                        <input type="text" class="form-control" id="inputZip" name="zipCode" placeholder="452001" required>
+                    <% } %> 
                 </div>
             </div>
 
