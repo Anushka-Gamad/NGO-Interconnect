@@ -4,7 +4,9 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const session  = require('express-session')
 const flash = require('connect-flash');
-const client = require('./database/pgdatabase')
+// const client = require('./database/pgdatabase')
+const bcrypt = require('bcryptjs')
+const cors = require('cors')
 
 const app = express()
 
@@ -16,9 +18,76 @@ app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json())
+app.use(flash());
+
+app.use(
+    cors({
+        origin: 'http://localhost:3001',
+        methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+        credentials: true,
+    })
+)
+
+const pg = require('pg');
+const expressSession = require('express-session');
+const pgSession = require('connect-pg-simple')(expressSession);
+
+const pgPool = new pg.Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database:'NGOInterConnect',
+    password: 'qwerty',
+    port: 5432
+});
+
+app.use(expressSession({
+  store: new pgSession({
+    pool : pgPool,
+    createTableIfMissing: true
+  }),
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+  // Insert express-session options here
+}));
+
+// const { Client } = require('pg')
+// const conObject = {
+//     user: process.env.USER,
+//     host: process.env.HOST,
+//     database: process.env.DATABASE,
+//     password: process.env.PASSWORD,
+//     port: process.env.PORT,
+// }
+
+// const client = new Client(conObject)
+// client.connect()
+
+// // session store and session config
+// const store = new (require('connect-pg-simple')(session))({
+//     conObject,
+// })
+
+// app.use(
+//     session({
+//         store: store,
+//         secret: "session secret",
+//         saveUninitialized: false,
+//         resave: false,
+//         cookie: {
+//             secure: false,
+//             httpOnly: false,
+//             sameSite: false,
+//             maxAge: 1000 * 60 * 60 * 24,
+//         },
+//     })
+// )
 
 app.use((req,res,next)=>{
     res.locals.userLoggedIn = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
     next();
 })
 
@@ -62,7 +131,7 @@ app.post("/register", (req,res)=>{
 })
 
 app.get("/registerNGO", (req,res)=>{  
-    res.render("ngo/ngoRegistration", {user})
+    res.render("ngo/ngoRegistration")
 })
 
 app.post("/registerNGO", async(req,res)=>{
