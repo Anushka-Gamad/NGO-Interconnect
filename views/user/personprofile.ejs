@@ -6,11 +6,10 @@
                 <div class="col-lg-4">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <img src=<%= person.user_image? person.user_image : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" %>  
+                            <img src=<%= (person.user_image? person.user_image : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png") %>  
                                 alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                             <h5 class="my-3"><%= person.user_first_name%> <%= person.user_middle_name %> <%= person.user_last_name %> </h5>
-                            <p class="text-muted mb-1">Occupation</p>
-                            <p class="text-muted mb-4">City , State</p>
+                            <p class="text-muted mb-4"><%= person.user_city %>,  <%= person.user_state %> </p>
                             <div class="d-flex justify-content-center mb-2">
                                 <button type="button" class="btn btn-primary">Follow</button>
                                 <button type="button" class="btn btn-outline-primary ms-1">Message</button>
@@ -24,7 +23,7 @@
                                     <p class="mb-0">Email</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">example@example.com</p>
+                                    <p class="text-muted mb-0"><%= person.user_mail %></p>
                                 </div>
                             </div>
                             <hr>
@@ -33,7 +32,7 @@
                                     <p class="mb-0">Phone</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">91................</p>
+                                    <p class="text-muted mb-0"><%= person.user_contact %> </p>
                                 </div>
                             </div>
                             <hr>
@@ -42,16 +41,16 @@
                                     <p class="mb-0">Gender</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">Male</p>
+                                    <p class="text-muted mb-0"><%= person.user_gender %> </p>
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <p class="mb-0">DOB</p>
+                                    <p class="mb-0">Age</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">dd/mm/yyyy</p>
+                                    <p class="text-muted mb-0"><%= person.user_age %> </p>
                                 </div>
                             </div>
                             <hr>
@@ -60,7 +59,7 @@
                                     <p class="mb-0">Address</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">.............,city,state</p>
+                                    <p class="text-muted mb-0"><%= person.user_address %> <%= person.user_city %> <%= person.user_state %>, <%= person.user_zip_code %> </p>
                                 </div>
                             </div>
                         </div>
