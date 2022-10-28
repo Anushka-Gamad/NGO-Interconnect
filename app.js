@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const client = require('./database/pgdatabase')
 const bcrypt = require('bcryptjs')
 const cors = require('cors');
+const { AsyncLocalStorage } = require('async_hooks');
 const pgSession = require('connect-pg-simple')(session);
 require('dotenv').config()
 
@@ -86,7 +87,8 @@ app.post("/registerNGO", async(req,res)=>{
                 "insert into superuser (user_name, user_password, type_user) values($1, $2, $3) returning *", [username,hashedPassword,'N']
             )
             await client.query(
-                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);", [govtId, username, ngoName, organization, ngoMail, add1+" "+add2, city, state, zipCode, phoneNumber]
+                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);"
+                , [govtId, username, ngoName, organization, ngoMail, add1+(add2?" "+add2:""), city, state, zipCode, phoneNumber]
             )
 
             if (data.rows.length === 0) {
@@ -139,7 +141,7 @@ app.post("/registerUser", async(req,res)=>{
             )
             await client.query(
                 "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);"
-                ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email, add1+" "+add2, city, state, zipCode]
+                ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email, add1+(add2?" "+add2:""), city, state, zipCode]
             )
 
             if (data.rows.length === 0) {
@@ -151,7 +153,7 @@ app.post("/registerUser", async(req,res)=>{
             req.session.user = {
                 id: user.id,
                 username: user.user_name,
-                type: user.type_user
+                type: user.type_user,
             }
 
             res.redirect('/drives')
@@ -178,7 +180,6 @@ app.post("/login", async(req,res)=>{
         )
         
         if(data.rows.length == 0){
-            // res.send("nulll")
             res.sendStatus(403)
         }
         const user = data.rows[0]
@@ -226,8 +227,21 @@ app.get("/drives/new", (req,res)=>{
 })
 
 
-app.get("/ngoProfile", (req,res) => {
-    res.render("ngo/ngoprofile");
+app.get("/ngoProfile", async(req,res) => {
+    
+    try{
+        const data = await client.query(
+            "select * from ngo where ngo_username = $1;", [req.session.user.username]
+        )
+        if(data.rows.length == 0){
+            res.sendStatus(403)
+        }
+        const ngo = data.rows[0]
+        res.render("ngo/ngoprofile",{ngo});
+    }catch(e){
+        console.log(e)
+        res.sendStatus(403)
+    }
 })
 
 app.get("/personProfile", (req,res) => {
