@@ -6,9 +6,9 @@
                 <div class="col-lg-4">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <img src="http://clipart-library.com/images_k/man-profile-silhouette/man-profile-silhouette-8.png"
+                            <img src=<%= person.user_image? person.user_image : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" %>  
                                 alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                            <h5 class="my-3">FULL NAME</h5>
+                            <h5 class="my-3"><%= person.user_first_name%> <%= person.user_middle_name %> <%= person.user_last_name %> </h5>
                             <p class="text-muted mb-1">Occupation</p>
                             <p class="text-muted mb-4">City , State</p>
                             <div class="d-flex justify-content-center mb-2">
