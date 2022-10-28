@@ -260,8 +260,20 @@ app.get("/ngoProfile", async(req,res) => {
     }
 })
 
-app.get("/personProfile", (req,res) => {
-    res.render("user/personprofile");
+app.get("/personProfile", async(req,res) => {
+    try{
+        const data = await client.query(
+            "select * from person where user_name = $1;", [req.session.user.username]
+        )
+        if(data.rows.length == 0){
+            res.sendStatus(403)
+        }
+        const person = data.rows[0]
+        res.render("user/personprofile", {person});
+    }catch(e){
+        console.log(e)
+        res.sendStatus(403)
+    }
 })
 
 
