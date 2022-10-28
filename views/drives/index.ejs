@@ -1,115 +1,52 @@
 <% layout('layouts/boilerplate') %>
 <style>
-.overlay {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.7);
-  transition: opacity 500ms;
-  visibility: hidden;
-  opacity: 0;
-}
-.overlay:target {
-  visibility: visible;
-  opacity: 1;
-}
-
-.popup {
-  margin: 50px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 5px;
-  width: 35%;
-  position: relative;
-  transition: all 10s ease-in-out;
-}
-
-.popup h2 {
-  margin-top: 0;
-  color: #333;
-  font-family: Tahoma, Arial, sans-serif;
-}
-.popup .close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  transition: all 200ms;
-  font-size: 30px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-}
-.popup .close:hover {
-  color:greenyellow;
-}
-.popup .content {
-  max-height: 30%;
-  overflow: auto;
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
 }
 </style>
-<div class="container">
+ <!-- <div class="container">
     <h1>All Drives</h1>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Blood Donation Drive</h5>
-                    <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur dolores, itaque suscipit labore sed ipsum in similique adipisci molestiae iusto possimus distinctio deleniti quo, earum necessitatibus. Beatae distinctio similique in!</p>
-                    <a class="btn btn-primary" href="#popup1">Register</a>
-                </div>
-            </div>
-        </div>
-        <!-- <div id="popup1" class="overlay">
-            <div class="popup">
-                <h2>Drive Details</h2>
-                <a class="close" href="#">&times;</a>
-                <div class="content">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi optio ex id assumenda. Magni itaque aperiam rem rerum eius earum, dignissimos fuga minima ea. Aliquid adipisci mollitia non tempora vitae.
-                </div>
-            </div>
-        </div> -->
-
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Green Day drive</h5>
-              <p class="card-text">Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.</p>
-              <a href="#" class="btn btn-primary">Register</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      
       <div class="row">
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Animal Helping drive</h5>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis doloremque, earum rem quis ullam sapiente recusandae. Dolore, necessitatibus eos inventore explicabo possimus voluptas nulla error, sequi ea maxime fugiat exercitationem.</p>
-              <a href="#" class="btn btn-primary">Register</a>
-            </div>
+        <div class="container-fluid">
+          <div class="row">
+              <div class="col-12 mt-3">
+                  <div class="card">
+                      <div class="card-horizontal">
+                          <div class="img-square-wrapper">
+                              <img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
+                          </div>
+                          <div class="card-body">
+                              <h4 class="card-title">Blood Donation Drive</h4>
+                              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta dolorum necessitatibus dolorem quis, at, velit inventore animi voluptatum illum nemo quisquam labore. Neque enim tempore tenetur, qui itaque voluptate quibusdam.</p>
+                              <a href="/views/drives/driveinfo.ejs" class="btn btn-primary">Register</a>
+                            </div>
+                      </div>
+                      
+                  </div>
+              </div>
           </div>
         </div>
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Donation drive</h5>
-              <p class="card-text">Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.</p>
-              <a href="#" class="btn btn-primary">Register</a>
-            </div>
-          </div>
-        </div>
-
-        <div id="popup1" class="overlay">
-            <div class="popup">
-                <h2>Drive Details</h2>
-                <a class="close" href="#">&times;</a>
-                <div class="content">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi optio ex id assumenda. Magni itaque aperiam rem rerum eius earum, dignissimos fuga minima ea. Aliquid adipisci mollitia non tempora vitae.
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 mt-3">
+                    <div class="card">
+                        <div class="card-horizontal">
+                            <div class="img-square-wrapper">
+                                <img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Donation Drive</h4>
+                                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta dolorum necessitatibus dolorem quis, at, velit inventore animi voluptatum illum nemo quisquam labore. Neque enim tempore tenetur, qui itaque voluptate quibusdam.</p>
+                                <a href="/views/drives/driveinfo.ejs" class="btn btn-primary">Register</a>
+                            </div>
+                        </div>
+                       
+                     </div>
                 </div>
             </div>
+            </div>
+      </div>
         </div>
       </div>
 
