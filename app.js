@@ -67,7 +67,7 @@ app.get("/registerNGO", (req,res)=>{
 })
 
 app.post("/registerNGO", async(req,res)=>{
-    const {username, password, ngoName, ngoMail, organization, phoneNumber, govtId, add1, add2, city, state, zipCode} = req.body;
+    const {username, password, ngoName, ngoMail, organization, phoneNumber, govtId, add1, add2, city, state, zipCode , ngo_image} = req.body;
 
     if(username == null || password == null || ngoName == null || ngoMail == null || phoneNumber == null || govtId == null || 
         add1==null || city == null || state == null || zipCode == null){
@@ -86,7 +86,7 @@ app.post("/registerNGO", async(req,res)=>{
                 "insert into superuser (user_name, user_password, type_user) values($1, $2, $3) returning *", [username,hashedPassword,'N']
             )
             await client.query(
-                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);", [govtId, username, ngoName, organization, ngoMail, add1+" "+add2, city, state, zipCode, phoneNumber]
+                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 , $11);", [govtId, username, ngoName, organization, ngoMail, add1+" "+add2, city, state, zipCode, phoneNumber , ngo_image]
             )
 
             if (data.rows.length === 0) {
@@ -116,7 +116,7 @@ app.get("/registerUser", (req,res)=>{
 })
 
 app.post("/registerUser", async(req,res)=>{
-    const {username, password, firstName, middleName, lastName, email, phnNumber, gender, aadhaar, dateOfBirth, add1, add2, city, state, zipCode} = req.body;
+    const {username, password, firstName, middleName, lastName, email, phnNumber, gender, aadhaar, dateOfBirth, add1, add2, city, state, zipCode , user_image} = req.body;
     
     if (username == null || password == null || firstName == null || lastName == null || email == null || phnNumber == null ||
         gender == null || aadhaar == null || dateOfBirth == null || add1 == null || city == null || state == null || zipCode == null){
@@ -138,8 +138,8 @@ app.post("/registerUser", async(req,res)=>{
                 ,[username, hashedPassword, 'P']
             )
             await client.query(
-                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);"
-                ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email, add1+" "+add2, city, state, zipCode]
+                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 , $15);"
+                ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email, add1+" "+add2, city, state, zipCode , user_image]
             )
 
             if (data.rows.length === 0) {
@@ -216,15 +216,32 @@ app.get("/drives", (req,res) => {
 })
 
 
-app.post("/drives", (req,res) =>{
-    res.send("Adding new drive")
-})
+// app.post("/drives", (req,res) =>{
+//     res.send("Adding new drive")
+// })
+
 
 
 app.get("/drives/new", (req,res)=>{
     res.render("drives/new")
 })
 
+app.post("/drives", async(req,res)=>{
+    const {title , driveType , driveVenue , driveDate , driveTime , driveManager , driveDescription , driveImage  } = req.body;
+    try{
+        console.log(date);
+        console.log(time);
+        
+        const data = await client.query(
+            "insert into drives (drive_name, drive_type, ngo_name , drive_description , drive_date , drive_time , drive_location , drive_manager) values($1, $2 , $3, $4, $5, $6 , $7, $8, $9 ) returning *"
+                ,[title , driveType, req.session.user.username , driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage])
+
+    }catch(e){
+        console.error(e.message)
+    }
+
+    res.redirect('/drives')
+})
 
 app.get("/ngoProfile", (req,res) => {
     res.render("ngo/ngoprofile");
@@ -234,9 +251,11 @@ app.get("/personProfile", (req,res) => {
     res.render("user/personprofile");
 })
 
+
 app.get("/", (req,res) => {
     res.render("home");
 })
+
 
 
 app.listen(3000, ()=>{
