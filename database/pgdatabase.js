@@ -1,11 +1,12 @@
+require('dotenv').config()
 const Pool = require('pg').Pool;
 
 const client = new Pool({
-    host: 'localhost',
-    user: 'postgres',
-    port: 5432,
-    password :'qwerty',
-    database: 'NGOInterConnect'
+    user: process.env.USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    password: process.env.PASSWORD,
+    port: process.env.PORT
 })
 
 module.exports = client;
