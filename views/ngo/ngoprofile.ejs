@@ -1,6 +1,5 @@
 <% layout('layouts/boilerplate') %>
     <section style="background-color: rgb(251, 249, 249);">
-
         <div class="container py-5">
             <div class="row">
                 <div class="col-lg-4">
@@ -9,7 +8,6 @@
                             <img src=<%= ngo.ngo_image? ngo.ngo_image : "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" %> 
                                 alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                             <h5 class="my-3"><%= ngo.ngo_name %> </h5>
-                            <!-- <p class="text-muted mb-1">Type</p> -->
                             <p class="text-muted mb-4"><%= ngo.ngo_city %>,  <%= ngo.ngo_state %> </p>
                             <div class="d-flex justify-content-center mb-2">
                                 <button type="button" class="btn btn-primary">Connect</button>

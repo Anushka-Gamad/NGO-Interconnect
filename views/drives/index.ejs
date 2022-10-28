@@ -1,57 +1,31 @@
 <% layout('layouts/boilerplate') %>
-<style>
-.card-horizontal {
-    display: flex;
-    flex: 1 1 auto;
-}
-</style>
- <!-- <div class="container">
-    <h1>All Drives</h1>
-      <div class="row">
-        <div class="container-fluid">
-          <div class="row">
-              <div class="col-12 mt-3">
-                  <div class="card">
-                      <div class="card-horizontal">
-                          <div class="img-square-wrapper">
-                              <img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
-                          </div>
-                          <div class="card-body">
-                              <h4 class="card-title">Blood Donation Drive</h4>
-                              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta dolorum necessitatibus dolorem quis, at, velit inventore animi voluptatum illum nemo quisquam labore. Neque enim tempore tenetur, qui itaque voluptate quibusdam.</p>
-                              <a href="/views/drives/driveinfo.ejs" class="btn btn-primary">Register</a>
-                            </div>
-                      </div>
-                      
-                  </div>
-              </div>
-          </div>
-        </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 mt-3">
-                    <div class="card">
-                        <div class="card-horizontal">
-                            <div class="img-square-wrapper">
-                                <img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
-                            </div>
-                            <div class="card-body">
-                                <h4 class="card-title">Donation Drive</h4>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta dolorum necessitatibus dolorem quis, at, velit inventore animi voluptatum illum nemo quisquam labore. Neque enim tempore tenetur, qui itaque voluptate quibusdam.</p>
-                                <a href="/views/drives/driveinfo.ejs" class="btn btn-primary">Register</a>
+    <style>
+        .card-horizontal {
+            display: flex;
+            flex: 1 1 auto;
+        }
+    </style>
+    <div class="container">
+        <h1>All Drives</h1>
+        <div class="row">
+            <% for(let drive of drives){ %>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="card">
+                                <div class="card-horizontal">
+                                    <div class="col-md-4">
+                                        <img class="img-fluid" src=<%= drive.drive_image? drive.drive_image: "http://via.placeholder.com/300x180" %>  alt="Card image cap">
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title"><%= drive.drive_name %> </h4>
+                                        <p class="card-text"><small class="text-muted"><%= drive.drive_type %> </small></p>
+                                        <p class="card-text"><%= drive.drive_description %> </p>
+                                        <a href="/drivesPersonalPage" class="btn btn-primary">Register</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                       
-                     </div>
+                    </div>
                 </div>
-            </div>
-            </div>
-      </div>
-        </div>
-      </div>
-
-    
-</div>
-<script>
-</script>
-
+            <% } %> 

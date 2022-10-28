@@ -210,40 +210,55 @@ app.get("/logout",async (req,res)=>{
     }
 })
 
-app.get("/drives", (req,res) => {
-    res.render('drives/index')
+app.get("/drives", async(req,res) => {
+    try{
+        const data = await client.query(
+            "select * from drives;"
+        )
+        const drives = data.rows
+    
+        res.render('drives/index', {drives})
+    }catch (e) {
+        res.sendStatus(403)
+    }
 })
 
-
-// app.post("/drives", (req,res) =>{
-//     res.send("Adding new drive")
-// })
-
-
-
-app.get("/drives/new", (req,res)=>{
-    res.render("drives/new")
+app.get("/allDrives", async(req,res)=>{
+    try{
+        const data = await client.query(
+            "select * from drives;"
+        )
+        const drives = data.rows
+    
+        res.send(drives)
+    }catch (e) {
+        res.sendStatus(403)
+    }
 })
 
 app.post("/drives", async(req,res)=>{
     const {title , driveType , driveVenue , driveDate , driveTime , driveManager , driveDescription , driveImage  } = req.body;
     try{
-        // console.log(date);
-        // console.log(time);
-        
         const data = await client.query(
             "insert into drives (drive_name, drive_type, ngo_username , drive_description , drive_date , drive_time , drive_location , drive_manager , drive_image) values($1, $2 , $3, $4, $5, $6 , $7, $8, $9 ) returning *"
-                ,[title , driveType, req.session.user.username , driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage])
-
+            ,[title , driveType, req.session.user.username , driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage])
+            
     }catch(e){
         console.error(e.message)
     }
-
+        
     res.redirect('/drives')
+    })
+    
+app.get("/drives/new", (req,res)=>{
+    res.render("drives/new")
+})
+
+app.get("/drivesPersonalPage", async(req,res)=>{
+    res.render("drives/driveinfo")
 })
 
 app.get("/ngoProfile", async(req,res) => {
-    
     try{
         const data = await client.query(
             "select * from ngo where ngo_username = $1;", [req.session.user.username]
