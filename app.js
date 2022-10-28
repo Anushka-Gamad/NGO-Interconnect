@@ -229,11 +229,11 @@ app.get("/drives/new", (req,res)=>{
 app.post("/drives", async(req,res)=>{
     const {title , driveType , driveVenue , driveDate , driveTime , driveManager , driveDescription , driveImage  } = req.body;
     try{
-        console.log(date);
-        console.log(time);
+        // console.log(date);
+        // console.log(time);
         
         const data = await client.query(
-            "insert into drives (drive_name, drive_type, ngo_name , drive_description , drive_date , drive_time , drive_location , drive_manager) values($1, $2 , $3, $4, $5, $6 , $7, $8, $9 ) returning *"
+            "insert into drives (drive_name, drive_type, ngo_username , drive_description , drive_date , drive_time , drive_location , drive_manager , drive_image) values($1, $2 , $3, $4, $5, $6 , $7, $8, $9 ) returning *"
                 ,[title , driveType, req.session.user.username , driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage])
 
     }catch(e){
