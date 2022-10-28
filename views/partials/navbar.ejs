@@ -13,10 +13,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/drives">Drives</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/drives/new">New Drive</a>
-                </li>
-               
+                <% if (userLoggedIn && userLoggedIn.type=='N') { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/drives/new">New Drive</a>
+                    </li>
+                <% } %>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <% if (!userLoggedIn) { %>
@@ -27,8 +28,19 @@
                         <a class="nav-link" href="/register">Register</a>
                     </li>
                 <% } else { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://cdn-icons-png.flaticon.com/512/848/848006.png" alt="" class="d-inline-block align-text-top" width="30" height="30">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <% if (userLoggedIn && userLoggedIn.type=='N') { %>
+                                <li><a class="dropdown-item" href="/ngoProfile">Profile</a></li>
+                            <% } %>
+                            <% if (userLoggedIn && userLoggedIn.type=='P') { %>
+                                <li><a class="dropdown-item" href="/personProfile">Profile</a></li>
+                            <% } %>
+                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        </ul>
                     </li>
                 <% } %> 
             </ul>

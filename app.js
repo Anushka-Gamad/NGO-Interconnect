@@ -97,7 +97,8 @@ app.post("/registerNGO", async(req,res)=>{
             
             req.session.user = {
                 id: user.id,
-                username: user.user_name
+                username: user.user_name,
+                type: user.type_user
             }
 
             res.redirect('/drives')
@@ -149,7 +150,8 @@ app.post("/registerUser", async(req,res)=>{
             
             req.session.user = {
                 id: user.id,
-                username: user.user_name
+                username: user.user_name,
+                type: user.type_user
             }
 
             res.redirect('/drives')
@@ -189,7 +191,8 @@ app.post("/login", async(req,res)=>{
 
         req.session.user = {
             id: user.id,
-            username: user.user_name
+            username: user.user_name,
+            type: user.type_user
         }
     }catch(e){
         console.error(e.message)
@@ -223,11 +226,11 @@ app.get("/drives/new", (req,res)=>{
 })
 
 
-app.get("/ngo-profile", (req,res) => {
+app.get("/ngoProfile", (req,res) => {
     res.render("ngo/ngoprofile");
 })
 
-app.get("/person-profile", (req,res) => {
+app.get("/personProfile", (req,res) => {
     res.render("user/personprofile");
 })
 
