@@ -223,19 +223,6 @@ app.get("/drives", async(req,res) => {
     }
 })
 
-app.get("/allDrives", async(req,res)=>{
-    try{
-        const data = await client.query(
-            "select * from drives;"
-        )
-        const drives = data.rows
-    
-        res.send(drives)
-    }catch (e) {
-        res.sendStatus(403)
-    }
-})
-
 app.post("/drives", async(req,res)=>{
     const {title , driveType , driveVenue , driveDate , driveTime , driveManager , driveDescription , driveImage  } = req.body;
     try{
@@ -248,14 +235,31 @@ app.post("/drives", async(req,res)=>{
     }
         
     res.redirect('/drives')
-    })
+})
+
+app.get("/drives/:id", async(req,res)=>{
+    const { id } = req.params
+    try{
+        const data = await client.query(
+            "select * from drives where drive_id = $1;", [id]
+        )
+        // res.send(data)
+
+        if(data.rows.length==0){
+            req.flash('error', 'Drive does not exist!!')
+            res.redirect('/drives')
+        }
+        
+        const drive = data.rows[0]
+
+        res.render("drives/driveinfo",{drive} )
+    }catch (e){
+        res.sendStatus(403)
+    }
+})
     
 app.get("/drives/new", (req,res)=>{
     res.render("drives/new")
-})
-
-app.get("/drivesPersonalPage", async(req,res)=>{
-    res.render("drives/driveinfo")
 })
 
 app.get("/ngoProfile", async(req,res) => {
