@@ -1,9 +1,10 @@
 <% layout('layouts/boilerplate') %>
     <style>
         .card-horizontal {
-        display: flex;
-        flex: 1 1 auto;
-        }   
+            display: flex;
+            flex: 1 1 auto;
+        }
+
         .img-square-wrapper {
             text-align: center;
         }
@@ -23,7 +24,6 @@
         body {
             height: 100%;
             background-color: #c1f3d1;
-            overflow: hidden;
         }
 
         .form-holder .form-content {
@@ -63,61 +63,68 @@
             margin-bottom: 5px;
         }
     </style>
-<h1 style="text-align:center"><%= drive.drive_name %> </h1>
-  <div class="card-body">
-    <div class="card-horizontal">
-      <div class="img-square-wrapper">
-                        <img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
-                    </div>
-                    <div class="card-body">
-                      <ul><p class="card-text"><%= drive.drive_description %> </p></ul>
-                      <ul class="font-weight-bold"></ul>
-                          <ul class="font-weight-bold">Drive Time: </ul>
-                          <ul class="font-weight-bold">Drive Type: </ul>
-                          <ul class="font-weight-bold">Drive location: </ul>
-                          <ul class="font-weight-bold">Drive Manager: </ul>
-                    </div>
-                </div>
-              
-            <div class="form-content">
-                <div class="form-items">
-                    <h3>To register yourself fill in the data below </h3>
-                    <form action="" method="post">
-                        <div class="col-md-12 mb-1">
-                            <input class="form-control" type="text" name="name" placeholder="Full Name" required>
-                        </div>
-                        <div class="col-md-12 mb-1">
-                            <input class="form-control" type="email" name="email" placeholder="E-mail Address" required>
-                        </div>
-                        <div class="col-md-12 mb-1">
-                            <input class="form-control" type="number" name="age" placeholder="Age" required>
-                        </div>
-                        <div class="col-md-12 mb-1">
-                            <input class="form-control" type="number" name="phnNumber" placeholder="Contact number" required>
-                        </div>
-
-                        <div class="col-md-12 mt-3">
-                            <label class="mb-3 mr-1" for="gender">Gender: </label>
-
-                            <input type="radio" class="btn-check" name="gender" id="male" autocomplete="off" required>
-                            <label class="btn btn-sm btn-outline-secondary" for="male">Male</label>
-
-                            <input type="radio" class="btn-check" name="gender" id="female" autocomplete="off" required>
-                            <label class="btn btn-sm btn-outline-secondary" for="female">Female</label>
-
-                            <input type="radio" class="btn-check" name="gender" id="secret" autocomplete="off" required>
-                            <label class="btn btn-sm btn-outline-secondary" for="secret">Secret</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                            <label class="form-check-label" for="invalidCheck">I confirm that all data are correct</label>
-                        </div>
-
-                        <div class="form-button mt-3">
-                            <button id="submit" type="submit" class="btn btn-success">Register</button>
-                        </div>
-                    </form>
-                </div>
+    <h1 style="text-align:center">
+        <%= drive.drive_name %>
+    </h1>
+    <div class="card-body">
+        <div class="card-horizontal">
+            <div class="img-square-wrapper">
+                <img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
             </div>
+            <div class="card-body">
+                <ul>
+                    <p class="card-text">
+                        <%= drive.drive_description %>
+                    </p>
+                </ul>
+                <ul class="font-weight-bold"></ul>
+                <ul class="font-weight-bold">Drive Time: </ul>
+                <ul class="font-weight-bold">Drive Type: </ul>
+                <ul class="font-weight-bold">Drive location: </ul>
+                <ul class="font-weight-bold">Drive Manager: </ul>
+            </div>
+        </div>
+
+        <div class="form-content">
+            <div class="form-items">
+                <h3>To register yourself fill in the data below </h3>
+                <form action="" method="post">
+                    <div class="col-md-12 mb-1">
+                        <input class="form-control" type="text" name="name" placeholder="Full Name" required>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <input class="form-control" type="email" name="email" placeholder="E-mail Address" required>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <input class="form-control" type="number" name="age" placeholder="Age" required>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <input class="form-control" type="number" name="phnNumber" placeholder="Contact number"
+                            required>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <label class="mb-3 mr-1" for="gender">Gender: </label>
+
+                        <input type="radio" class="btn-check" name="gender" id="male" autocomplete="off" required>
+                        <label class="btn btn-sm btn-outline-secondary" for="male">Male</label>
+
+                        <input type="radio" class="btn-check" name="gender" id="female" autocomplete="off" required>
+                        <label class="btn btn-sm btn-outline-secondary" for="female">Female</label>
+
+                        <input type="radio" class="btn-check" name="gender" id="secret" autocomplete="off" required>
+                        <label class="btn btn-sm btn-outline-secondary" for="secret">Secret</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                        <label class="form-check-label" for="invalidCheck">I confirm that all data are correct</label>
+                    </div>
+
+                    <div class="form-button mt-3">
+                        <button id="submit" type="submit" class="btn btn-success">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
