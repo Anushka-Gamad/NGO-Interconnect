@@ -261,6 +261,7 @@ app.get("/drives/:id", async(req,res)=>{
         res.sendStatus(403)
     }
 })
+
 app.post("/drives/:id", async(req,res)=>{
     const { id } = req.params
 
@@ -272,19 +273,24 @@ app.post("/drives/:id", async(req,res)=>{
 
 // retrive user_id using username from person table-----(not working)
 
-    const user_id = await client.query("select * from person where person.user_name=$1;" , [req.session.user.username])
+        const user = await client.query(
+            "select * from person where person.user_name=$1;" , [req.session.user.username]
+        )
+
+        res.send(user)
 // console.log(user_id)
 // console.log(month + "-" + day + "-" + year)
 
-        const data = await client.query(
-            "insert into connects_to (user_id, drive_id, date_of_registration) values($1, $2 , $3) returning * "
-            ,[user_id , id , (year + "-" + month + "-" + day) ])
+        // const data = await client.query(
+        //     "insert into connects_to (user_id, drive_id, date_of_registration) values($1, $2 , $3) returning * "
+        //     ,[user_id , id , (year + "-" + month + "-" + day) ]
+        // )
             
     }catch(e){
         console.error(e.message)
     }
         
-    res.redirect('/drives')
+    // res.redirect('/drives')
 })
 
 

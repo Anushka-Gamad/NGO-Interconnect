@@ -98,9 +98,7 @@
         }
     </style>
 
-    <h1 style="text-align:center">
-        <%= drive.drive_name %>
-    </h1>
+    <h1 style="text-align:center"> <%= drive.drive_name %> </h1>
     <div class="main">
         <div class="card-body">
             <div class="card-horizontal">
@@ -121,8 +119,10 @@
                 </div>
             </div>
 
-            <div class="bt">
-                <button class="custom-btn btn-13">REGISTER</button>
-            </div>
+            <form action="/drives/<%= drive.drive_id %>" method="post">
+                <div class="bt">
+                    <button class="custom-btn btn-13" >REGISTER</button>
+                </div>
+            </form>
         </div>
     </div>
