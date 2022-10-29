@@ -1,5 +1,9 @@
 <% layout('layouts/boilerplate') %>
     <style>
+        .card-horizontal {
+        display: flex;
+        flex: 1 1 auto;
+        }   
         .img-square-wrapper {
             text-align: center;
         }
@@ -59,13 +63,25 @@
             margin-bottom: 5px;
         }
     </style>
-
-    <h1 style="text-align:center"><%= drive.drive_name %> </h1>
-        <div class="card-body">
-            <p class="card-text"> <%= drive.drive_description %>  </p>
+<h1 style="text-align:center"><%= drive.drive_name %> </h1>
+  <div class="card-body">
+    <div class="card-horizontal">
+      <div class="img-square-wrapper">
+                        <img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
+                    </div>
+                    <div class="card-body">
+                      <ul><p class="card-text"><%= drive.drive_description %> </p></ul>
+                      <ul class="font-weight-bold"></ul>
+                          <ul class="font-weight-bold">Drive Time: </ul>
+                          <ul class="font-weight-bold">Drive Type: </ul>
+                          <ul class="font-weight-bold">Drive location: </ul>
+                          <ul class="font-weight-bold">Drive Manager: </ul>
+                    </div>
+                </div>
+              
             <div class="form-content">
                 <div class="form-items">
-                    <h3>Fill in the data below</h3>
+                    <h3>To register yourself fill in the data below </h3>
                     <form action="" method="post">
                         <div class="col-md-12 mb-1">
                             <input class="form-control" type="text" name="name" placeholder="Full Name" required>
