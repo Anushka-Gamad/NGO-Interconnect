@@ -1,16 +1,48 @@
 <% layout('layouts/boilerplate') %>
     <style>
-        .card-horizontal {
-            display: flex;
-            flex: 1 1 auto;
-        }
+        div.main{
+  overflow-x: scroll;
+  display: flex;
+  margin:auto;
+  width: 50%;
+}
 
-        .img-square-wrapper {
+.bt {
+  margin: auto;
+  width: 50%;
+  display : flex;
+  justify-content: centre;
+}
+button {
+  text-align : centre;
+  margin: 20px;
+}
+.custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}   
+.img-square-wrapper {
             text-align: center;
         }
-
-        *,
-        body {
+*,body {
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
             font-weight: 400;
@@ -23,108 +55,63 @@
         html,
         body {
             height: 100%;
-            background-color: #c1f3d1;
+            background-color: white;
+            overflow: hidden;
         }
 
-        .form-holder .form-content {
-            position: relative;
-            text-align: center;
-            display: -webkit-box;
-            display: -moz-box;
-            display: -ms-flexbox;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-justify-content: center;
-            justify-content: center;
-            -webkit-align-items: center;
-            align-items: center;
-            padding: 30px;
-        }
+.btn-13 {
+  background-color: #89d8d3;
+background-image: linear-gradient(315deg, #89d8d3 0%, #03c8a8 74%);
+  border: none;
+  z-index: 1;
+}
+.btn-13:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  border-radius: 5px;
+   background-color: #4dccc6;
+background-image: linear-gradient(315deg, #4dccc6 0%, #96e4df 74%);
+  box-shadow:
+   -7px -7px 20px 0px #fff9,
+   -4px -4px 5px 0px #fff9,
+   7px 7px 20px 0px #0002,
+   4px 4px 5px 0px #0001;
+  transition: all 0.3s ease;
+}
+.btn-13:hover {
+  color: #fff;
+}
+.btn-13:hover:after {
+  top: 0;
+  height: 100%;
+}
+.btn-13:active {
+  top: 2px;
+} </style>
 
-        .form-content .form-items {
-            border: 3px solid #fff;
-            padding: 20px;
-            display: inline-block;
-            width: 100%;
-            min-width: 540px;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-            text-align: left;
-            -webkit-transition: all 0.4s ease;
-            transition: all 0.4s ease;
-        }
-
-        .form-content h3 {
-            color: rgb(0, 0, 0);
-            text-align: left;
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-    </style>
-    <h1 style="text-align:center">
-        <%= drive.drive_name %>
-    </h1>
-    <div class="card-body">
-        <div class="card-horizontal">
-            <div class="img-square-wrapper">
-                <img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
-            </div>
-            <div class="card-body">
-                <ul>
-                    <p class="card-text">
-                        <%= drive.drive_description %>
-                    </p>
-                </ul>
-                <ul class="font-weight-bold"></ul>
-                <ul class="font-weight-bold">Drive Time: </ul>
-                <ul class="font-weight-bold">Drive Type: </ul>
-                <ul class="font-weight-bold">Drive location: </ul>
-                <ul class="font-weight-bold">Drive Manager: </ul>
-            </div>
-        </div>
-
-        <div class="form-content">
-            <div class="form-items">
-                <h3>To register yourself fill in the data below </h3>
-                <form action="" method="post">
-                    <div class="col-md-12 mb-1">
-                        <input class="form-control" type="text" name="name" placeholder="Full Name" required>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                        <input class="form-control" type="email" name="email" placeholder="E-mail Address" required>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                        <input class="form-control" type="number" name="age" placeholder="Age" required>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                        <input class="form-control" type="number" name="phnNumber" placeholder="Contact number"
-                            required>
-                    </div>
-
-                    <div class="col-md-12 mt-3">
-                        <label class="mb-3 mr-1" for="gender">Gender: </label>
-
-                        <input type="radio" class="btn-check" name="gender" id="male" autocomplete="off" required>
-                        <label class="btn btn-sm btn-outline-secondary" for="male">Male</label>
-
-                        <input type="radio" class="btn-check" name="gender" id="female" autocomplete="off" required>
-                        <label class="btn btn-sm btn-outline-secondary" for="female">Female</label>
-
-                        <input type="radio" class="btn-check" name="gender" id="secret" autocomplete="off" required>
-                        <label class="btn btn-sm btn-outline-secondary" for="secret">Secret</label>
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                        <label class="form-check-label" for="invalidCheck">I confirm that all data are correct</label>
-                    </div>
-
-                    <div class="form-button mt-3">
-                        <button id="submit" type="submit" class="btn btn-success">Register</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+<h1 style="text-align:center"><%= drive.drive_name %></h1>
+  <div class="main">
+  	 <div class="card-body">
+    		<div class="card-horizontal">
+      			<div class="img-square-wrapper"><img class="" src="http://via.placeholder.com/300x180" alt="Card image cap">
+                          </div>
+                    	<div class="card-body">
+                      		<ul><p class="card-text"><%= drive.drive_description %> </p></ul>
+                      		<ul class="font-weight-bold"></ul>
+                          	<ul class="font-weight-bold">Drive Time: </ul>
+                          	<ul class="font-weight-bold">Drive Type: </ul>
+                          	<ul class="font-weight-bold">Drive location: </ul>
+                          	<ul class="font-weight-bold">Drive Manager: </ul>
+                    	</div>
+                	</div>
+	     
+    <div class="bt">
+    	<button class="custom-btn btn-13">REGISTER</button>
+    </div>   
     </div>
+</div>
