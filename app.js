@@ -248,10 +248,9 @@ app.get("/drives/:id", async(req,res)=>{
         const data = await client.query(
             "select * from drives where drive_id = $1;", [id]
         )
-
         if(data.rows.length==0){
-            req.flash('error', 'Drive does not exist!!')
-            res.redirect('/drives')
+            // req.flash('error', 'Drive does not exist!!')
+            return res.redirect('/drives')
         }
 
         const drive = data.rows[0]
@@ -270,29 +269,43 @@ app.post("/drives/:id", async(req,res)=>{
     const month = today.getMonth()+1
     const year = today.getFullYear()
     try{
-
-// retrive user_id using username from person table-----(not working)
-
         const user = await client.query(
             "select * from person where person.user_name=$1;" , [req.session.user.username]
         )
 
         res.send(user)
-// console.log(user_id)
-// console.log(month + "-" + day + "-" + year)
 
         // const data = await client.query(
         //     "insert into connects_to (user_id, drive_id, date_of_registration) values($1, $2 , $3) returning * "
         //     ,[user_id , id , (year + "-" + month + "-" + day) ]
         // )
-            
+                        
     }catch(e){
         console.error(e.message)
     }
-        
-    // res.redirect('/drives')
+    
+    res.redirect('/drives')
 })
 
+app.get("/drives/:id/edit", async(req,res)=>{
+    const { id } = req.params
+    try{
+        const data = await client.query(
+            "select * from drives where drive_id = $1;", [id]
+        )
+
+        if(data.rows.length==0){
+            req.flash('error', 'Drive does not exist!!')
+            res.redirect('/drives')
+        }
+
+        const drive = data.rows[0]
+
+        res.render("drives/edit",{drive})
+    }catch (e){
+        res.sendStatus(403)
+    }
+})
 
 app.get("/ngoProfile", async(req,res) => {
     try{

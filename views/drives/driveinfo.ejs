@@ -5,7 +5,7 @@
             <div class="row align-items-center">
                 <div class="col-7 mx-auto">
                     <div class="card">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png"
+                        <img src=<%= drive.drive_image? drive.drive_image: "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png" %>
                             class="card-img-top img-fluid" alt="...">
                         <div class="card-body">
                             <h3 class="card-title">
@@ -76,7 +76,7 @@
                             <div class="d-flex justify-content-center mb-2">
                                 <% if (userLoggedIn) { %>
                                     <% if (userLoggedIn.username == drive.ngo_username) { %>
-                                        <a type="button" class="btn btn-outline-danger col-md-6 me-3"> Edit </a>
+                                        <a type="button" href="/drives/<%= drive.drive_id %>/edit" class="btn btn-outline-danger col-md-6 me-3"> Edit </a>
                                     <% } %>
                                     <% if (userLoggedIn.type=='P') { %>
                                         <a type="button" class="btn btn-success col-md-6">Register</a>
