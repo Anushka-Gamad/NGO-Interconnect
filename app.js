@@ -223,23 +223,33 @@ app.get("/drives", async(req,res) => {
     }
 })
 
+app.get("/drives/new", (req,res)=>{
+    res.render("drives/new")
+})
+
 app.post("/drives", async(req,res)=>{
     const {title , driveType , driveVenue , driveDate , driveTime , driveManager , driveDescription , driveImage  } = req.body;
     try{
         const data = await client.query(
             "insert into drives (drive_name, drive_type, ngo_username , drive_description , drive_date , drive_time , drive_location , drive_manager , drive_image) values($1, $2 , $3, $4, $5, $6 , $7, $8, $9 ) returning *"
             ,[title , driveType, req.session.user.username , driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage])
-            
+        
+        const driveID = data.rows.drive_id
+        
+        const today = new Date()
+        const day = today.getDate()        
+        const month = today.getMonth()+1
+        const year = today.getFullYear()
+
+        // const d1 = await client.query (
+        //     "insert into uploads (drive_id, ngo_username, upload_date) values ($1, $2, $3) returning *",
+        //     [driveID, req.session.user.username, (year + "-" + month + "-" + day)]
+        // )
     }catch(e){
         console.error(e.message)
     }
         
     res.redirect('/drives')
-})
-
-
-app.get("/drives/new", (req,res)=>{
-    res.render("drives/new")
 })
 
 app.get("/drives/:id", async(req,res)=>{
@@ -254,37 +264,11 @@ app.get("/drives/:id", async(req,res)=>{
         }
 
         const drive = data.rows[0]
-
+        
         res.render("drives/driveinfo",{drive})
     }catch (e){
         res.sendStatus(403)
     }
-})
-
-app.post("/drives/:id", async(req,res)=>{
-    const { id } = req.params
-
-    const today = new Date()
-    const day = today.getDate()        
-    const month = today.getMonth()+1
-    const year = today.getFullYear()
-    try{
-        const user = await client.query(
-            "select * from person where person.user_name=$1;" , [req.session.user.username]
-        )
-
-        res.send(user)
-
-        // const data = await client.query(
-        //     "insert into connects_to (user_id, drive_id, date_of_registration) values($1, $2 , $3) returning * "
-        //     ,[user_id , id , (year + "-" + month + "-" + day) ]
-        // )
-                        
-    }catch(e){
-        console.error(e.message)
-    }
-    
-    res.redirect('/drives')
 })
 
 app.get("/drives/:id/edit", async(req,res)=>{
@@ -300,11 +284,58 @@ app.get("/drives/:id/edit", async(req,res)=>{
         }
 
         const drive = data.rows[0]
-
+        
         res.render("drives/edit",{drive})
     }catch (e){
         res.sendStatus(403)
     }
+})
+
+app.put("/drives/:id", async(req,res)=>{
+    const { id } = req.params
+    const {title , driveType , driveVenue , driveDate , driveTime , driveManager , driveDescription , driveImage  } = req.body;
+    try{
+        const data = await client.query (
+            "update drives set drive_name = $1, drive_type = $2, drive_description = $3, drive_date = $4, drive_time = $5, drive_location = $6, drive_manager = $7, drive_image = $8 where drive_id = $9 returning *"
+            ,[title , driveType, driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage, id]
+        )
+        
+        if(data.rows.length == 0){
+            res.redirect(`/drives/${id}/edit`)
+        }
+
+    }catch(e){
+        console.error(e.message)
+    }
+        
+    res.redirect(`/drives/${id}`)
+})  
+
+app.get("/connect/:id", async (req,res)=>{
+    return res.send("Connecting user")
+    const { id } = req.params
+
+    const today = new Date()
+    const day = today.getDate()        
+    const month = today.getMonth()+1
+    const year = today.getFullYear()
+    try{
+        // const user = await client.query(
+        //     "select * from person where person.user_name=$1;" , [req.session.user.username]
+        // )
+
+        // res.send(user)
+
+        // const data = await client.query(
+        //     "insert into connects_to (user_id, drive_id, date_of_registration) values($1, $2 , $3) returning * "
+        //     ,[user_id , id , (year + "-" + month + "-" + day) ]
+        // )
+                        
+    }catch(e){
+        console.error(e.message)
+    }
+    
+    // res.redirect('/drives')
 })
 
 app.get("/ngoProfile", async(req,res) => {

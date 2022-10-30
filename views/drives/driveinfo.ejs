@@ -79,7 +79,7 @@
                                         <a type="button" href="/drives/<%= drive.drive_id %>/edit" class="btn btn-outline-danger col-md-6 me-3"> Edit </a>
                                     <% } %>
                                     <% if (userLoggedIn.type=='P') { %>
-                                        <a type="button" class="btn btn-success col-md-6">Register</a>
+                                        <a type="button" href="/connect/<%= drive.drive_id %>" class="btn btn-success col-md-6">Register</a>
                                     <% } %>
                                 <% } else { %>
                                     <a type="button" href="/login" class="btn btn-success col-md-6">Login</a>
@@ -90,7 +90,4 @@
                 </div>
             </div>
         </div>
-
-
-
     </section>
