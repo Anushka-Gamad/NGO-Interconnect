@@ -213,7 +213,7 @@ app.get("/logout",async (req,res)=>{
 app.get("/drives", async(req,res) => {
     try{
         const data = await client.query(
-            "select * from drives;"
+            "SELECT * from drives where drive_date > CURRENT_DATE order by drive_date;"
         )
         const drives = data.rows
     
@@ -241,10 +241,10 @@ app.post("/drives", async(req,res)=>{
         const month = today.getMonth()+1
         const year = today.getFullYear()
 
-        // const d1 = await client.query (
-        //     "insert into uploads (drive_id, ngo_username, upload_date) values ($1, $2, $3) returning *",
-        //     [driveID, req.session.user.username, (year + "-" + month + "-" + day)]
-        // )
+        const d1 = await client.query (
+            "insert into uploads (drive_id, ngo_username, upload_date) values ($1, $2, $3) returning *",
+            [driveID, req.session.user.username, (year + "-" + month + "-" + day)]
+        )
     }catch(e){
         console.error(e.message)
     }
@@ -312,7 +312,6 @@ app.put("/drives/:id", async(req,res)=>{
 })  
 
 app.get("/connect/:id", async (req,res)=>{
-    return res.send("Connecting user")
     const { id } = req.params
 
     const today = new Date()
@@ -320,22 +319,23 @@ app.get("/connect/:id", async (req,res)=>{
     const month = today.getMonth()+1
     const year = today.getFullYear()
     try{
-        // const user = await client.query(
-        //     "select * from person where person.user_name=$1;" , [req.session.user.username]
-        // )
+        const data = await client.query(
+            "select * from person where user_name = $1 ;" , [req.session.user.username]
+        )
 
         // res.send(user)
+        const user_id = data.rows[0].user_id
 
-        // const data = await client.query(
-        //     "insert into connects_to (user_id, drive_id, date_of_registration) values($1, $2 , $3) returning * "
-        //     ,[user_id , id , (year + "-" + month + "-" + day) ]
-        // )
+        const data1 = await client.query(
+            "insert into connects_to (user_id, drive_id, date_of_registration) values($1, $2 , $3) returning * "
+            ,[user_id , id , (year + "-" + month + "-" + day) ]
+        )
                         
     }catch(e){
         console.error(e.message)
     }
     
-    // res.redirect('/drives')
+    res.redirect('/drives')
 })
 
 app.get("/ngoProfile", async(req,res) => {
