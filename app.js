@@ -310,7 +310,11 @@ app.put("/drives/:id", async(req,res)=>{
     }
         
     res.redirect(`/drives/${id}`)
-})  
+})
+
+app.get('/allNgo', async(req,res)=>{
+    res.render('ngo/viewNgo')
+})
 
 app.get("/connect/:id", async (req,res)=>{
     const { id } = req.params
