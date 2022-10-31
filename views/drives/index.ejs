@@ -6,7 +6,7 @@
         }
     </style>
     <div class="container">
-        <h1>All Drives</h1>
+        <h1>Upcomming Drives</h1>
         <div class="row">
             <% for(let drive of drives){ %>
                 <div class="container-fluid">
@@ -21,7 +21,7 @@
                                         <h4 class="card-title"><%= drive.drive_name %> </h4>
                                         <p class="card-text"><small class="text-muted"><%= drive.drive_type %> </small></p>
                                         <p class="card-text"><%= drive.drive_description %> </p>
-                                        <a href="/drives/<%= drive.drive_id %>" class="btn btn-success">Register</a>
+                                        <a href="/drives/<%= drive.drive_id %>" class="btn btn-success">View Drive</a>
                                     </div>
                                 </div>
                             </div>
