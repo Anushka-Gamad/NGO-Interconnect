@@ -10,8 +10,17 @@
                             <h5 class="my-3"><%= ngo.ngo_name %> </h5>
                             <p class="text-muted mb-4"><%= ngo.ngo_city %>,  <%= ngo.ngo_state %> </p>
                             <div class="d-flex justify-content-center mb-2">
-                                <button type="button" class="btn btn-primary">Connect</button>
-                                <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                                <button type="button" class="btn btn-success">Connect</button>
+                                <div class="btn-group dropend">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Donate
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li><a class="dropdown-item" href="#">Menu </a></li>
+                                      <li><a class="dropdown-item" href="#">Menu item</a></li>
+                                      <li><a class="dropdown-item" href="#">Menu item</a></li>
+                                    </ul>
+                                  </div>
                             </div>
                         </div>
                     </div>
