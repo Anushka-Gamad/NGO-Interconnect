@@ -357,9 +357,9 @@ app.get("/ngoProfile", async(req,res) => {
         if(data1.rows.length == 0){
             // res.sendStatus(403)
         }
-        const drive = data1.rows;
+        const drives = data1.rows;
 
-        const data = {ngo,drive};
+        const data = {ngo,drives};
 
         res.render("ngo/ngoprofile",{data});
     }catch(e){
