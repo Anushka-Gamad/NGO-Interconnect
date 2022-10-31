@@ -6,10 +6,10 @@
                 <div class="col-lg-4">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <img src=<%= (person.user_image? person.user_image : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png") %>  
+                            <img src=<%= (data.person.user_image? data.person.user_image : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png") %>  
                                 alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                            <h5 class="my-3"><%= person.user_first_name%> <%= person.user_middle_name %> <%= person.user_last_name %> </h5>
-                            <p class="text-muted mb-4"><%= person.user_city %>,  <%= person.user_state %> </p>
+                            <h5 class="my-3"><%= data.person.user_first_name%> <%= data.person.user_middle_name %> <%= data.person.user_last_name %> </h5>
+                            <p class="text-muted mb-4"><%= data.person.user_city %>,  <%= data.person.user_state %> </p>
                             <div class="d-flex justify-content-center mb-2">
                                 <button type="button" class="btn btn-outline-primary ms-1">Message</button>
                             </div>
@@ -22,7 +22,7 @@
                                     <p class="mb-0">Email</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><%= person.user_mail %></p>
+                                    <p class="text-muted mb-0"><%= data.person.user_mail %></p>
                                 </div>
                             </div>
                             <hr>
@@ -31,7 +31,7 @@
                                     <p class="mb-0">Phone</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><%= person.user_contact %> </p>
+                                    <p class="text-muted mb-0"><%= data.person.user_contact %> </p>
                                 </div>
                             </div>
                             <hr>
@@ -40,7 +40,7 @@
                                     <p class="mb-0">Gender</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><%= person.user_gender %> </p>
+                                    <p class="text-muted mb-0"><%= data.person.user_gender %> </p>
                                 </div>
                             </div>
                             <hr>
@@ -49,7 +49,7 @@
                                     <p class="mb-0">Age</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><%= person.user_age %> </p>
+                                    <p class="text-muted mb-0"><%= data.person.user_age %> </p>
                                 </div>
                             </div>
                             <hr>
@@ -58,7 +58,7 @@
                                     <p class="mb-0">Address</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><%= person.user_address %> <%= person.user_city %> <%= person.user_state %>, <%= person.user_zip_code %> </p>
+                                    <p class="text-muted mb-0"><%= data.person.user_address %> <%= data.person.user_city %> <%= data.person.user_state %>, <%= data.person.user_zip_code %> </p>
                                 </div>
                             </div>
                         </div>
@@ -67,99 +67,33 @@
                 <div class="col-lg-8">
                     <h2 class="my-3">Drives Attended</h2>
                     <div class="row ">
-                        <div class="col-md-3">
-                            <div class="card text-white bg-success mb-4 mb-md-4">
-                                <div class="card-body text-center">
-                                    <img src="http://clipart-library.com/images_k/man-profile-silhouette/man-profile-silhouette-8.png"
-                                        alt="avatar" class="rounded-circle img-fluid" style="width: 85px;">
-                                    <h5 class="my-3">Drive Name</h5>
-                                    <p class="text-white mb-1">January 20,2011</p>
-                                    <p class="text-white mb-4">City, State</p>
+                        <% let i=0 %>
+                            <% for( let drive of data.drives ) { %>
+                                <div class="col-md-3">
+                                    <% if (i%2==0) { %>
+                                        <div class="card text-white bg-success mb-4 mb-md-4">
+                                            <div class="card-body text-center">
+                                                <img src=<%=drive.drive_image? drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"%>
+                                                alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
+                                                <h5 class="my-3"><%= drive.drive_name %></h5>
+                                                <p class="text-white mb-1"><%= drive.drive_date %></p>
+                                                <!-- <p class="text-white mb-4">City, State</p> -->
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="card mb-4 mb-md-4">
+                                            <div class="card-body text-center">
+                                                <img src=<%=drive.drive_image? drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"%>
+                                                alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
+                                                <h5 class="my-3"> <%= drive.drive_name %> </h5>
+                                                <p class="mb-1"><%= drive.drive_date %></p>
+                                                <!-- <p class="text-white mb-4">City, State</p> -->
+                                            </div>
+                                        </div>
+                                    <% } %>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="card mb-4 mb-md-4">
-                                <div class="card-body text-center">
-                                    <img src="http://clipart-library.com/images_k/man-profile-silhouette/man-profile-silhouette-8.png"
-                                        alt="avatar" class="rounded-circle img-fluid" style="width: 85px;">
-                                    <h5 class="my-3">Drive Name</h5>
-                                    <p class="text-muted mb-1">January 20,2011</p>
-                                    <p class="text-muted mb-4">City, State</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card text-white bg-success mb-4 mb-md-4">
-                                <div class="card-body text-center">
-                                    <img src="http://clipart-library.com/images_k/man-profile-silhouette/man-profile-silhouette-8.png"
-                                        alt="avatar" class="rounded-circle img-fluid" style="width: 85px;">
-                                    <h5 class="my-3">Drive Name</h5>
-                                    <p class="text-white mb-1">January 20,2011</p>
-                                    <p class="text-white mb-4">City, State</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card mb-4 mb-md-4">
-                                <div class="card-body text-center">
-                                    <img src="http://clipart-library.com/images_k/man-profile-silhouette/man-profile-silhouette-8.png"
-                                        alt="avatar" class="rounded-circle img-fluid" style="width: 85px;">
-                                    <h5 class="my-3">Drive Name</h5>
-                                    <p class="text-muted mb-1">January 20,2011</p>
-                                    <p class="text-muted mb-4">City, State</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="card mb-4 mb-md-4">
-                                <div class="card-body text-center">
-                                    <img src="http://clipart-library.com/images_k/man-profile-silhouette/man-profile-silhouette-8.png"
-                                        alt="avatar" class="rounded-circle img-fluid" style="width: 85px;">
-                                    <h5 class="my-3">Drive Name</h5>
-                                    <p class="text-muted mb-1">January 20,2011</p>
-                                    <p class="text-muted mb-4">City, State</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="card text-white bg-success mb-4 mb-md-4">
-                                <div class="card-body text-center">
-                                    <img src="https://as2.ftcdn.net/v2/jpg/03/40/12/49/1000_F_340124934_bz3pQTLrdFpH92ekknuaTHy8JuXgG7fi.jpg"
-                                        alt="avatar" class="rounded-circle img-fluid" style="width: 85px;">
-                                    <h5 class="my-3">Drive Name</h5>
-                                    <p class="text-white mb-1">January 20,2011</p>
-                                    <p class="text-white mb-4">City, State</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card mb-4 mb-md-4">
-                                <div class="card-body text-center">
-                                    <img src="http://clipart-library.com/images_k/man-profile-silhouette/man-profile-silhouette-8.png"
-                                        alt="avatar" class="rounded-circle img-fluid" style="width: 85px;">
-                                    <h5 class="my-3">Drive Name</h5>
-                                    <p class="text-muted mb-1">January 20,2011</p>
-                                    <p class="text-muted mb-4">City, State</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card text-white bg-success mb-4 mb-md-4">
-                                <div class="card-body text-center">
-                                    <img src="http://clipart-library.com/images_k/man-profile-silhouette/man-profile-silhouette-8.png"
-                                        alt="avatar" class="rounded-circle img-fluid" style="width: 85px;">
-                                    <h5 class="my-3">Drive Name</h5>
-                                    <p class="text-white mb-1">January 20,2011</p>
-                                    <p class="text-white mb-4">City, State</p>
-                                </div>
-                            </div>
-                        </div>
-
+                            <% i++; %>
+                            <% } %>
                     </div>
                 </div>
             </div>

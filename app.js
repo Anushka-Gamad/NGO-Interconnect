@@ -236,16 +236,20 @@ app.post("/drives", async(req,res)=>{
             ,[title , driveType, req.session.user.username , driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage])
         
         const driveID = data.rows.drive_id
-        
-        const today = new Date()
-        const day = today.getDate()        
-        const month = today.getMonth()+1
-        const year = today.getFullYear()
 
-        const d1 = await client.query (
-            "insert into uploads (drive_id, ngo_username, upload_date) values ($1, $2, $3) returning *",
-            [driveID, req.session.user.username, (year + "-" + month + "-" + day)]
-        )
+        return res.send(data.rows)
+
+        // console.log(driveID)
+        
+        // const today = new Date()
+        // const day = today.getDate()        
+        // const month = today.getMonth()+1
+        // const year = today.getFullYear()
+
+        // const d1 = await client.query (
+        //     "insert into uploads (drive_id, ngo_username, upload_date) values ($1, $2, $3) returning *",
+        //     [driveID, req.session.user.username, (year + "-" + month + "-" + day)]
+        // )
     }catch(e){
         console.error(e.message)
     }
@@ -351,11 +355,11 @@ app.get("/ngoProfile", async(req,res) => {
         const ngo = data2.rows[0]
 
         const data1 = await client.query(
-            "select * from drives where drive_id in (select drive_id from uploads where ngo_username = $1)", [req.session.user.username]
+            "select * from drives where ngo_username = $1;", [req.session.user.username]
         )
 
         if(data1.rows.length == 0){
-            // res.sendStatus(403)
+            return res.send(data1)
         }
         const drives = data1.rows;
 
@@ -370,14 +374,22 @@ app.get("/ngoProfile", async(req,res) => {
 
 app.get("/personProfile", async(req,res) => {
     try{
-        const data = await client.query(
+        const data0 = await client.query(
             "select * from person where user_name = $1;", [req.session.user.username]
         )
-        if(data.rows.length == 0){
+        if(data0.rows.length == 0){
             res.sendStatus(403)
         }
-        const person = data.rows[0]
-        res.render("user/personprofile", {person});
+        const person = data0.rows[0]
+        const data1 = await client.query(
+            "select * from drives where drive_id in(select drive_id from connects_to where user_id = $1);",[person.user_id]
+        )
+
+        // return res.send(data1)
+        const drives = data1.rows;
+
+        const data = {person, drives}
+        res.render("user/personprofile", {data});
     }catch(e){
         console.log(e)
         res.sendStatus(403)
