@@ -5,13 +5,13 @@
                 <div class="col-lg-4">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <img src=<%= ngo.ngo_image? ngo.ngo_image : "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" %> 
+                            <img src=<%= data.ngo.ngo_image? data.ngo.ngo_image : "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" %> 
                                 alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                            <h5 class="my-3"><%= ngo.ngo_name %> </h5>
-                            <p class="text-muted mb-4"><%= ngo.ngo_city %>,  <%= ngo.ngo_state %> </p>
+                            <h5 class="my-3"><%= data.ngo.ngo_name %> </h5>
+                            <p class="text-muted mb-4"><%= data.ngo.ngo_city %>,  <%= data.ngo.ngo_state %> </p>
                             <div class="d-flex justify-content-center mb-2">
                                 <button type="button" class="btn btn-primary">Connect</button>
-                                <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                                <button type="button" class="btn btn-outline-primary ms-1">Donate</button>
                             </div>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                                     <p class="mb-0">Email</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><%= ngo.ngo_mail %> </p>
+                                    <p class="text-muted mb-0"><%= data.ngo.ngo_mail %> </p>
                                 </div>
                             </div>
                             <hr>
@@ -31,7 +31,7 @@
                                     <p class="mb-0">Phone</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><%= ngo.ngo_contact %> </p>
+                                    <p class="text-muted mb-0"><%= data.ngo.ngo_contact %> </p>
                                 </div>
                             </div>
                             <hr>
@@ -40,7 +40,7 @@
                                     <p class="mb-0">Address</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><%= ngo.ngo_address %> <%= ngo.ngo_city %> <%= ngo.ngo_state %>, <%= ngo.ngo_zip_code %> </p>
+                                    <p class="text-muted mb-0"><%= data.ngo.ngo_address %> <%= data.ngo.ngo_city %> <%= data.ngo.ngo_state %>, <%= data.ngo.ngo_zip_code %> </p>
                                 </div>
                             </div>
                         </div>
@@ -49,6 +49,9 @@
                 <div class="col-lg-8">
                     <h2 class="my-3">Drives Conducted</h2>
                     <div class="row ">
+                        <% for(  ) { %>
+                        
+                        <% } %>
                         <div class="col-md-3">
                             <div class="card text-white bg-success mb-4 mb-md-4">
                                 <div class="card-body text-center">
