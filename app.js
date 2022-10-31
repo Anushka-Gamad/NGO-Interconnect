@@ -215,6 +215,7 @@ app.get("/drives", async(req,res) => {
         const data = await client.query(
             "SELECT * from drives where drive_date > CURRENT_DATE order by drive_date;"
         )
+
         const drives = data.rows
     
         res.render('drives/index', {drives})
@@ -340,14 +341,27 @@ app.get("/connect/:id", async (req,res)=>{
 
 app.get("/ngoProfile", async(req,res) => {
     try{
-        const data = await client.query(
+        const data2 = await client.query(
             "select * from ngo where ngo_username = $1;", [req.session.user.username]
         )
-        if(data.rows.length == 0){
+
+        if(data2.rows.length == 0){
             res.sendStatus(403)
         }
-        const ngo = data.rows[0]
-        res.render("ngo/ngoprofile",{ngo});
+        const ngo = data2.rows[0]
+
+        const data1 = await client.query(
+            "select * from drives where drive_id in (select drive_id from uploads where ngo_username = $1)", [req.session.user.username]
+        )
+
+        if(data1.rows.length == 0){
+            // res.sendStatus(403)
+        }
+        const drives = data1.rows;
+
+        const data = {ngo,drives};
+
+        res.render("ngo/ngoprofile",{data});
     }catch(e){
         console.log(e)
         res.sendStatus(403)
