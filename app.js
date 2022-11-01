@@ -223,6 +223,24 @@ app.get("/drives", async(req,res) => {
         res.sendStatus(403)
     }
 })
+app.get('/allNgo', async(req,res)=>{
+
+    
+try{
+        const data = await client.query(
+            "SELECT * from ngo;"
+        )
+
+        const ngos = data.rows
+
+        // return res.send(ngos)
+    
+        res.render('ngo/viewNgo', {ngos})
+    }catch (e) {
+        res.sendStatus(403)
+    }
+
+})
 
 app.get("/drives/new", (req,res)=>{
     res.render("drives/new")
@@ -276,6 +294,35 @@ app.get("/drives/:id", async(req,res)=>{
     }
 })
 
+app.get("/ngo/:id", async(req,res)=>{
+    const { id } = req.params
+    try{
+        const data2 = await client.query(
+            "select * from ngo where ngo_username = $1;", [id]
+        )
+
+        if(data2.rows.length == 0){
+            res.sendStatus(403)
+        }
+        const ngo = data2.rows[0]
+
+        const data1 = await client.query(
+            "select * from drives where ngo_username = $1;", [id]
+        )
+
+        // if(data1.rows.length == 0){
+        //     return res.send(data1)
+        // }
+        const drives = data1.rows;
+
+        const data = {ngo,drives};
+
+        res.render("ngo/ngoprofile",{data});
+    }catch(e){
+        console.log(e)
+        res.sendStatus(403)
+    }
+})
 app.get("/drives/:id/edit", async(req,res)=>{
     const { id } = req.params
     try{
@@ -314,7 +361,9 @@ app.put("/drives/:id", async(req,res)=>{
     }
         
     res.redirect(`/drives/${id}`)
-})  
+})
+
+
 
 app.get("/connect/:id", async (req,res)=>{
     const { id } = req.params
@@ -341,6 +390,37 @@ app.get("/connect/:id", async (req,res)=>{
     
     res.redirect('/drives')
 })
+app.get("/member/:id", async (req,res)=>{
+    const { id } = req.params
+
+    const today = new Date()
+    const day = today.getDate()        
+    const month = today.getMonth()+1
+    const year = today.getFullYear()
+    try{
+        const data = await client.query(
+            "select * from person where user_name = $1 ;" ,[req.session.user.username] 
+        )
+        // res.send(user)
+        const datango = await client.query(
+            "select * from ngo where ngo_username = $1 ;" , [id]
+        )
+        //  res.send(user)
+        const user_id = data.rows[0].user_id
+        const ngo_username  = datango.rows[0].ngo_username
+
+        const data1 = await client.query(
+            "insert into member (user_id, ngo_username, start_date) values($1, $2 , $3) returning * "
+            ,[user_id , ngo_username , (year + "-" + month + "-" + day) ]
+        )
+                        
+    }catch(e){
+        console.error(e.message)
+    }
+    
+    res.redirect('/allNgo')
+})
+
 
 app.get("/ngoProfile", async(req,res) => {
     try{
@@ -357,9 +437,10 @@ app.get("/ngoProfile", async(req,res) => {
             "select * from drives where ngo_username = $1;", [req.session.user.username]
         )
 
-        if(data1.rows.length == 0){
-            return res.send(data1)
+       /* if(data1.rows.length == 0){
+            //return res.send(data1)
         }
+        */
         const drives = data1.rows;
 
         // return res.send(drives)
