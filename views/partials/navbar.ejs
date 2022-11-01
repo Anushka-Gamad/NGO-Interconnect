@@ -10,12 +10,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <% if (userLoggedIn && userLoggedIn.type=='P') { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/ngo">All NGOs</a>
-                    </li>
-                <% } %>
-                
+                <li class="nav-item">
+                    <a class="nav-link" href="/ngo">NGOs</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/drives">Drives</a>
                 </li>
@@ -24,7 +21,6 @@
                         <a class="nav-link" href="/drives/new">New Drive</a>
                     </li>
                 <% } %>
-                
                 
             </ul>
             <ul class="navbar-nav ms-auto">
