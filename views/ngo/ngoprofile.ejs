@@ -1,4 +1,10 @@
 <% layout('layouts/boilerplate') %>
+<style>
+    .dropdown-menu {
+        width: 400px !important;
+        height: 200px !important;
+    }
+</style>
     <section style="background-color: rgb(251, 249, 249);">
         <div class="container py-5">
             <div class="row">
@@ -16,27 +22,27 @@
                                 <%= data.ngo.ngo_city %>, <%= data.ngo.ngo_state %>
                             </p>
                             <% if (userLoggedIn.type=='P') { %>
-                            <div class="d-flex justify-content-center mb-2">
-                                <a href="/member/<%= data.ngo.ngo_username%>"  class="btn btn-success">Connect</a>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <a href="/member/<%= data.ngo.ngo_username%>"  class="btn btn-success">Connect</a>
 
-                                <div class="btn-group dropend ps-2">
-                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                      Donate
-                                    </button>
-                                    
-                                        <form class="dropdown-menu p-4" method="post" action="/donate/<%= data.ngo.ngo_username%>">
+                                    <div class="btn-group dropend ps-2">
+                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Donate
+                                        </button>
+                                        <form action="/donate/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
                                             <div class="mb-3">
-                                              <label for="amount" class="form-label">Amount</label>
-                                              <input type="integer" class="form-control" name="amount" id="amount" placeholder="amount in rupees">
+                                                <label for="amount" class="form-label">Amount</label>
+                                                <input type="integer" class="form-control" name="amount" id="amount" placeholder="Amount" required>
                                             </div>
-                                         <button type="submit" class="btn btn-success ">Confirm</button>
-                                          </form>
-                                    
-                                  </div>
-                            </div>
+                                            <div class="text-right">
+                                                <button type="submit" class="btn btn-success float-end">Confirm</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             <% } %>
                             <% if (userLoggedIn.type=='N') { %>
-                                <a href="/viewmembers/<%= data.ngo.ngo_username%>"  class="btn btn-success">View Members</a>
+                                <a href="/viewmembers/<%= data.ngo.ngo_username%>" class="btn btn-success">View Members</a>
                                 <% } %>
                         </div>
                        
