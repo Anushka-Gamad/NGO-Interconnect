@@ -237,7 +237,7 @@ app.post("/drives", async(req,res)=>{
         
         const driveID = data.rows.drive_id
 
-        return res.send(data.rows)
+        // return res.send(data.rows)
 
         // console.log(driveID)
         
@@ -328,7 +328,6 @@ app.get("/connect/:id", async (req,res)=>{
             "select * from person where user_name = $1 ;" , [req.session.user.username]
         )
 
-        // res.send(user)
         const user_id = data.rows[0].user_id
 
         const data1 = await client.query(
@@ -362,6 +361,8 @@ app.get("/ngoProfile", async(req,res) => {
             return res.send(data1)
         }
         const drives = data1.rows;
+
+        // return res.send(drives)
 
         const data = {ngo,drives};
 
