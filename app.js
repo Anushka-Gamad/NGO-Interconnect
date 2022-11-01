@@ -438,9 +438,10 @@ app.post("/donate/:id", async(req,res)=>{
     const day = today.getDate()        
     const month = today.getMonth()+1
     const year = today.getFullYear()
-    
+
     if(amount == null || amount<=0){
         res.sendStatus(403)
+
     }
     try{
         const data = await client.query(
@@ -453,10 +454,11 @@ app.post("/donate/:id", async(req,res)=>{
             "insert into donate (user_id, ngo_username,amount,pay_date) values($1, $2 , $3, $4) returning * "
             ,[user_id , id , amount, (year + "-" + month + "-" + day) ]
         )
-    }catch(e){
+    }
+    catch(e){
+
         console.error(e.message)
     }
-
     res.redirect(`/ngo/${id}`)
 })
 
