@@ -19,7 +19,20 @@
                             <div class="d-flex justify-content-center mb-2">
                                 <a href="/member/<%= data.ngo.ngo_username%>"  class="btn btn-success">Connect</a>
 
-                                <button type="button" class="btn btn-outline-success ms-1">Donate</button>
+                                <div class="btn-group dropend ps-2">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Donate
+                                    </button>
+                                    
+                                        <form class="dropdown-menu p-4" method="post" action="/donate/<%= data.ngo.ngo_username%>">
+                                            <div class="mb-3">
+                                              <label for="amount" class="form-label">Amount</label>
+                                              <input type="integer" class="form-control" name="amount" id="amount" placeholder="amount in rupees">
+                                            </div>
+                                         <button type="submit" class="btn btn-success ">Confirm</button>
+                                          </form>
+                                    
+                                  </div>
                             </div>
                             <% } %>
                             <% if (userLoggedIn.type=='N') { %>

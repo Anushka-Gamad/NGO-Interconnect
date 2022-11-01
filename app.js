@@ -200,6 +200,36 @@ app.post("/login", async(req,res)=>{
     res.redirect('/drives')
 })
 
+app.post("/donate/:id", async(req,res)=>{
+    const { id } = req.params
+    const {amount} = req.body;
+    const today = new Date()
+    const day = today.getDate()        
+    const month = today.getMonth()+1
+    const year = today.getFullYear()
+    
+    if(amount == null){
+        res.sendStatus(403)
+    }
+    try{
+        const data = await client.query(
+            "select * from person where user_name = $1 ;" [req.session.user.username],
+        )
+       
+        const user_id = data.rows[0].user_id
+        
+
+        const data1 = await client.query(
+            "insert into donate (user_id, ngo_username,amount,pay_date) values($1, $2 , $3, $4) returning * "
+            ,[user_id , id , amount, (year + "-" + month + "-" + day) ]
+        )
+    }catch(e){
+        console.error(e.message)
+    }
+
+    res.redirect(`/ngo/${id}`)
+})
+
 app.get("/logout",async (req,res)=>{
     try{
         req.flash('success','Logged Out!!')
