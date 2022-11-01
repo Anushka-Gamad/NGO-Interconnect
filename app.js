@@ -462,6 +462,30 @@ app.post("/donate/:id", async(req,res)=>{
     res.redirect(`/ngo/${id}`)
 })
 
+app.post("/Report/:username", async(req,res)=>{
+    const { username } = req.params
+    const {Report} = req.body;
+    if(Report == null ){
+        res.sendStatus(403)
+     }
+    try{
+        const data = await client.query(
+            "select * from person where user_name = $1 ;", [req.session.user.username]
+        )
+        const UID = data.rows[0].user_id
+        
+        const data1 = await client.query(
+            "insert into report (user_id, ngo_username,desciption) values($1, $2 , $3) returning * "
+            ,[UID , username , Report]
+        )
+    }
+    catch(e){
+
+        console.error(e.message)
+    }
+    res.redirect(`/ngo/${username}`)
+})
+
 app.get("/person/:id", async(req,res) => {
     const {id } = req.params
     try{
