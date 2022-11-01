@@ -464,31 +464,6 @@ app.get("/person/:id", async(req,res) => {
         res.sendStatus(403)
     }
 })
-app.get("/personviewProfile/:id", async(req,res) => {
-    const { id } = req.params
-    try{
-        const data0 = await client.query(
-            "select * from person where user_name = $1;", [id]
-        )
-        if(data0.rows.length == 0){
-            res.sendStatus(403)
-        }
-        const person = data0.rows[0]
-        const data1 = await client.query(
-            "select * from drives where drive_id in(select drive_id from connects_to where user_id = $1);",[person.user_id]
-        )
-
-        // return res.send(data1)
-        const drives = data1.rows;
-
-        const data = {person, drives}
-        res.render("user/personprofile", {data});
-    }catch(e){
-        console.log(e)
-        res.sendStatus(403)
-    }
-})
-
 
 app.get("/", (req,res) => {
     res.render("home");
