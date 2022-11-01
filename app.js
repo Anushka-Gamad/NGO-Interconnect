@@ -421,43 +421,11 @@ app.get("/member/:id", async (req,res)=>{
     res.redirect('/allNgo')
 })
 
-
-app.get("/ngoProfile", async(req,res) => {
-    try{
-        const data2 = await client.query(
-            "select * from ngo where ngo_username = $1;", [req.session.user.username]
-        )
-
-        if(data2.rows.length == 0){
-            res.sendStatus(403)
-        }
-        const ngo = data2.rows[0]
-
-        const data1 = await client.query(
-            "select * from drives where ngo_username = $1;", [req.session.user.username]
-        )
-
-       /* if(data1.rows.length == 0){
-            //return res.send(data1)
-        }
-        */
-        const drives = data1.rows;
-
-        // return res.send(drives)
-
-        const data = {ngo,drives};
-
-        res.render("ngo/ngoprofile",{data});
-    }catch(e){
-        console.log(e)
-        res.sendStatus(403)
-    }
-})
-
-app.get("/personProfile", async(req,res) => {
+app.get("/person/:id", async(req,res) => {
+    const {id } = req.params
     try{
         const data0 = await client.query(
-            "select * from person where user_name = $1;", [req.session.user.username]
+            "select * from person where user_name = $1;", [id]
         )
         if(data0.rows.length == 0){
             res.sendStatus(403)

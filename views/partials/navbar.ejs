@@ -42,10 +42,10 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <% if (userLoggedIn && userLoggedIn.type=='N') { %>
-                                <li><a class="dropdown-item" href="/ngoProfile">Profile</a></li>
+                                <li><a class="dropdown-item" href="/ngo/<%= userLoggedIn.username %>">Profile</a></li>
                             <% } %>
                             <% if (userLoggedIn && userLoggedIn.type=='P') { %>
-                                <li><a class="dropdown-item" href="/personProfile">Profile</a></li>
+                                <li><a class="dropdown-item" href="/person/<%= userLoggedIn.username %>">Profile</a></li>
                             <% } %>
                             <li><a class="dropdown-item" href="/logout">Logout</a></li>
                         </ul>
