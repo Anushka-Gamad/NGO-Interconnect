@@ -1,10 +1,10 @@
 <% layout('layouts/boilerplate') %>
-<style>
-    .dropdown-menu {
-        width: 400px !important;
-        height: 200px !important;
-    }
-</style>
+    <style>
+        .dropdown-menu {
+            width: 400px !important;
+            height: 200px !important;
+        }
+    </style>
     <section style="background-color: rgb(251, 249, 249);">
         <div class="container py-5">
             <div class="row">
@@ -21,18 +21,21 @@
                             <p class="text-muted mb-4">
                                 <%= data.ngo.ngo_city %>, <%= data.ngo.ngo_state %>
                             </p>
-                            <% if (userLoggedIn.type=='P') { %>
+                            <% if (userLoggedIn.type=='P' ) { %>
                                 <div class="d-flex justify-content-center mb-2">
-                                    <a href="/member/<%= data.ngo.ngo_username%>"  class="btn btn-success">Connect</a>
+                                    <a href="/member/<%= data.ngo.ngo_username%>" class="btn btn-success">Connect</a>
 
                                     <div class="btn-group dropend ps-2">
-                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Donate
+                                        <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            Donate
                                         </button>
-                                        <form action="/donate/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
+                                        <form action="/donate/<%= data.ngo.ngo_username%>" method="post"
+                                            class="dropdown-menu p-4">
                                             <div class="mb-3">
                                                 <label for="amount" class="form-label">Amount</label>
-                                                <input type="integer" class="form-control" name="amount" id="amount" placeholder="Amount" required>
+                                                <input type="integer" class="form-control" name="amount" id="amount"
+                                                    placeholder="Amount" required>
                                             </div>
                                             <div class="text-right">
                                                 <button type="submit" class="btn btn-success float-end">Confirm</button>
@@ -40,13 +43,37 @@
                                         </form>
                                     </div>
                                 </div>
-                            <% } %>
-                            <% if (userLoggedIn.type=='N') { %>
-                                <a href="/viewmembers/<%= data.ngo.ngo_username%>" class="btn btn-success">View Members</a>
-                                <% } %>
+                                <% if (userLoggedIn.type=='P' ) { %>
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <div class="btn-group dropend ps-2">
+                                            <button type="button" class="btn btn-danger dropdown-toggle"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                Report
+                                            </button>
+                                            <form action="/donate/<%= data.ngo.ngo_username%>" method="post"
+                                                class="dropdown-menu p-4">
+                                                <div class="mb-3">
+                                                    <label for="Report" class="form-label">yy</label>
+                                                    <input type="text" class="form-control" name="Report" id="Report"
+                                                        placeholder="Description" required>
+                                                </div>
+                                                <div class="text-right">
+                                                    <button type="submit"
+                                                        class="btn btn-success float-end">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                         </div>
-                       
+                        <% } %>
+                            <% } %>
+                                <% if (userLoggedIn.type=='N' ) { %>
+                                    <a href="/viewmembers/<%= data.ngo.ngo_username%>" class="btn btn-success">View
+                                        Members</a>
+                                    <% } %>
                     </div>
+
+
                     <div class="card mb-4 mb-lg-0">
                         <div class="card-body">
                             <div class="row">
@@ -77,70 +104,60 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <p class="text-muted mb-0">
-                                        <%= data.ngo.ngo_address %> <%= data.ngo.ngo_city %> <%= data.ngo.ngo_state %>, <%= data.ngo.ngo_zip_code %>
+                                        <%= data.ngo.ngo_address %>
+                                            <%= data.ngo.ngo_city %>
+                                                <%= data.ngo.ngo_state %>, <%= data.ngo.ngo_zip_code %>
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="shadow-none p-3 mb-3 bg-light">
-                    <div class="row mx-md-n5">
-                        
-                        <% if (userLoggedIn.type=='P') { %>
-                            <div class="d-flex justify-content-center mb-2">
-                            <div class="btn-group dropend ps-2">
-                                <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Report
-                                </button>
-                                <form class="dropdown-menu p-4">
-                                    <div class="mb-3">
-                                        <label for="Report" class="form-label">Reason for Reporting NGO</label>
-                                        <input type="text" class="form-control" name="Report" id="Report" placeholder="Description" required>
+                  </div>
+                    <div class="col-lg-8">
+                        <h2 class="my-2">Drives Conducted</h2>
+                        <div class="row ">
+                            <% let i=0 %>
+                                <% for( let drive of data.drives ) { %>
+                                    <div class="col-md-3">
+                                        <% if (i%2==0) { %>
+                                            <div class="card text-white bg-success mb-4 mb-md-4">
+                                                <div class="card-body text-center">
+                                                    <img src=<%=drive.drive_image?
+                                                        drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                        %>
+                                                    alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
+                                                    <h5 class="my-3">
+                                                        <%= drive.drive_name %>
+                                                    </h5>
+                                                    <p class="text-white mb-1">
+                                                        <%= drive.drive_date %>
+                                                    </p>
+                                                    <!-- <p class="text-white mb-4">City, State</p> -->
+                                                </div>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="card mb-4 mb-md-4">
+                                                    <div class="card-body text-center">
+                                                        <img src=<%=drive.drive_image?
+                                                            drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                            %>
+                                                        alt="avatar" class="rounded-circle img-fluid" style="width:
+                                                        105px;">
+                                                        <h5 class="my-3">
+                                                            <%= drive.drive_name %>
+                                                        </h5>
+                                                        <p class="mb-1">
+                                                            <%= drive.drive_date %>
+                                                        </p>
+                                                        <!-- <p class="text-white mb-4">City, State</p> -->
+                                                    </div>
+                                                </div>
+                                                <% } %>
                                     </div>
-                                    <div class="text-right">
-                                        <button type="submit" class="btn btn-success float-end">Submit</button>
-                                    </div>
-                                </form>
-                                </div>
-                            </div>
+                                    <% i++; %>
+                                        <% } %>
                         </div>
-                            <% } %>
-                    </div>
-                    </div>
-                    
-                </div>
-                <div class="col-lg-8">
-                    <h2 class="my-3">Drives Conducted</h2>
-                    <div class="row ">
-                        <% let i=0 %>
-                            <% for( let drive of data.drives ) { %>
-                                <div class="col-md-3">
-                                    <% if (i%2==0) { %>
-                                        <div class="card text-white bg-success mb-4 mb-md-4">
-                                            <div class="card-body text-center">
-                                                <img src=<%=drive.drive_image? drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"%>
-                                                alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
-                                                <h5 class="my-3"><%= drive.drive_name %></h5>
-                                                <p class="text-white mb-1"><%= drive.drive_date %></p>
-                                                <!-- <p class="text-white mb-4">City, State</p> -->
-                                            </div>
-                                        </div>
-                                    <% } else { %>
-                                        <div class="card mb-4 mb-md-4">
-                                            <div class="card-body text-center">
-                                                <img src=<%=drive.drive_image? drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"%>
-                                                alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
-                                                <h5 class="my-3"> <%= drive.drive_name %> </h5>
-                                                <p class="mb-1"><%= drive.drive_date %></p>
-                                                <!-- <p class="text-white mb-4">City, State</p> -->
-                                            </div>
-                                        </div>
-                                    <% } %>
-                                </div>
-                            <% i++; %>
-                            <% } %>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
