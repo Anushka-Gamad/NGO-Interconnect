@@ -241,6 +241,25 @@ try{
     }
 
 })
+app.get("/viewmembers/:ngoUname", async(req,res)=>{
+    const { ngoUname } = req.params
+
+    
+    try{
+            const data = await client.query(
+                "SELECT * from member natural join person where ngo_username=$1;",[ngoUname]
+            )
+    
+            const views = data.rows
+    
+             //return res.send(views)
+        
+            res.render('ngo/viewmembers', {views})
+        }catch (e) {
+            res.sendStatus(403)
+        }
+    
+    })
 
 app.get("/drives/new", (req,res)=>{
     res.render("drives/new")
@@ -457,6 +476,30 @@ app.get("/personProfile", async(req,res) => {
     try{
         const data0 = await client.query(
             "select * from person where user_name = $1;", [req.session.user.username]
+        )
+        if(data0.rows.length == 0){
+            res.sendStatus(403)
+        }
+        const person = data0.rows[0]
+        const data1 = await client.query(
+            "select * from drives where drive_id in(select drive_id from connects_to where user_id = $1);",[person.user_id]
+        )
+
+        // return res.send(data1)
+        const drives = data1.rows;
+
+        const data = {person, drives}
+        res.render("user/personprofile", {data});
+    }catch(e){
+        console.log(e)
+        res.sendStatus(403)
+    }
+})
+app.get("/personviewProfile/:id", async(req,res) => {
+    const { id } = req.params
+    try{
+        const data0 = await client.query(
+            "select * from person where user_name = $1;", [id]
         )
         if(data0.rows.length == 0){
             res.sendStatus(403)
