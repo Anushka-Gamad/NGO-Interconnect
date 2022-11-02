@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const client = require('./database/pgdatabase')
 const bcrypt = require('bcryptjs')
 const cors = require('cors');
+const emailService = require('./service/emailService');
 const pgSession = require('connect-pg-simple')(session);
 require('dotenv').config()
 
@@ -512,6 +513,10 @@ app.get("/person/:id", async(req,res) => {
 
 app.get("/", (req,res) => {
     res.render("home");
+})
+
+app.get("/OTPtest", (req, res) => {
+    emailService("niketpathak08@gmail.com");
 })
 
 
