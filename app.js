@@ -380,8 +380,11 @@ app.get("/ngo/:id", async(req,res)=>{
 
         const data = {ngo,drives};
 
-        res.render("ngo/ngoprofile",{data});
-
+        if(!req.session.user){
+            res.redirect('/login')
+        }else{
+            res.render("ngo/ngoprofile",{data});
+        }
     }catch(e){
         console.log(e)
         res.sendStatus(403)
