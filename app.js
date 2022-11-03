@@ -476,7 +476,7 @@ app.post("/Report/:username", async(req,res)=>{
         const UID = data.rows[0].user_id
         
         const data1 = await client.query(
-            "insert into report (user_id, ngo_username,desciption) values($1, $2 , $3) returning * "
+            "insert into report (user_id, ngo_username,description) values($1, $2 , $3) returning * "
             ,[UID , username , Report]
         )
     }
