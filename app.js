@@ -8,6 +8,7 @@ const client = require('./database/pgdatabase')
 const bcrypt = require('bcryptjs')
 const cors = require('cors');
 const emailService = require('./service/emailService');
+const { AuthenticationMD5Password } = require('pg-protocol/dist/messages');
 const pgSession = require('connect-pg-simple')(session);
 require('dotenv').config()
 
@@ -86,12 +87,18 @@ app.post("/registerNGO", async(req,res)=>{
             const data = await client.query(
                 "insert into superuser (user_name, user_password, type_user) values($1, $2, $3) returning *", [username,hashedPassword,'N']
             )
-            await client.query(
-                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 , $11);", [govtId, username, ngoName, organization, ngoMail, add1+(add2?" "+add2:""), city, state, zipCode, phoneNumber , ngoImage]
+            const data2 = await client.query(
+                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 , $11) returning *", [govtId, username, ngoName, organization, ngoMail, add1+(add2?" "+add2:""), city, state, zipCode, phoneNumber , ngoImage]
             )
 
             if (data.rows.length === 0) {
                 res.sendStatus(403)
+            }
+
+            if(data2.rows.length ===0){
+                await client.query(
+                    "delete from superuser where user_name = $1", [username]
+                )
             }
 
             const user = data.rows[0]
@@ -138,13 +145,19 @@ app.post("/registerUser", async(req,res)=>{
                 "insert into superuser (user_name, user_password , type_user) values($1, $2 , $3) returning *"
                 ,[username, hashedPassword, 'P']
             )
-            await client.query(
+            const data2 = await client.query(
                 "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 , $15);"
                 ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email,  add1+(add2?" "+add2:""), city, state, zipCode , userImage]
             )
 
             if (data.rows.length === 0) {
                 res.sendStatus(403)
+            }
+
+            if(data2.rows.length ===0){
+                await client.query(
+                    "delete from superuser where user_name = $1", [username]
+                )
             }
 
             const user = data.rows[0]
@@ -463,9 +476,9 @@ app.post("/donate/:id", async(req,res)=>{
     res.redirect(`/ngo/${id}`)
 })
 
-app.post("/Report/:username", async(req,res)=>{
+app.post("/report/:username", async(req,res)=>{
     const { username } = req.params
-    const {Report} = req.body;
+    const { Report } = req.body;
     if(Report == null ){
         res.sendStatus(403)
      }
@@ -476,7 +489,11 @@ app.post("/Report/:username", async(req,res)=>{
         const UID = data.rows[0].user_id
         
         const data1 = await client.query(
+<<<<<<< HEAD
             "insert into report (user_id, ngo_username,description) values($1, $2 , $3) returning * "
+=======
+            "insert into report (user_id, ngo_username, description) values($1, $2 , $3) returning * "
+>>>>>>> 86007f997a88ec0c11a68e8800042c68ecbfe934
             ,[UID , username , Report]
         )
     }

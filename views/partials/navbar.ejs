@@ -36,7 +36,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://cdn-icons-png.flaticon.com/512/848/848006.png" alt="" class="d-inline-block align-text-top" width="30" height="30">
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="width: fit-content !important; height:fit-content !important;">
                             <% if (userLoggedIn && userLoggedIn.type=='N') { %>
                                 <li><a class="dropdown-item" href="/ngo/<%= userLoggedIn.username %>">Profile</a></li>
                             <% } %>
