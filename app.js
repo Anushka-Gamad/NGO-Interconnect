@@ -476,9 +476,9 @@ app.post("/donate/:id", async(req,res)=>{
     res.redirect(`/ngo/${id}`)
 })
 
-app.post("/Report/:username", async(req,res)=>{
+app.post("/report/:username", async(req,res)=>{
     const { username } = req.params
-    const {Report} = req.body;
+    const { Report } = req.body;
     if(Report == null ){
         res.sendStatus(403)
      }
@@ -489,7 +489,7 @@ app.post("/Report/:username", async(req,res)=>{
         const UID = data.rows[0].user_id
         
         const data1 = await client.query(
-            "insert into report (user_id, ngo_username,desciption) values($1, $2 , $3) returning * "
+            "insert into report (user_id, ngo_username, description) values($1, $2 , $3) returning * "
             ,[UID , username , Report]
         )
     }
