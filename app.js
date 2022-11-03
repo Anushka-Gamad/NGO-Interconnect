@@ -337,7 +337,7 @@ app.get('/ngo', async(req,res)=>{
         )
 
         const ngos = data.rows
-    
+         
         res.render('ngo/viewNgo', {ngos})
     }catch (e) {
         res.sendStatus(403)
@@ -489,11 +489,7 @@ app.post("/report/:username", async(req,res)=>{
         const UID = data.rows[0].user_id
         
         const data1 = await client.query(
-<<<<<<< HEAD
             "insert into report (user_id, ngo_username,description) values($1, $2 , $3) returning * "
-=======
-            "insert into report (user_id, ngo_username, description) values($1, $2 , $3) returning * "
->>>>>>> 86007f997a88ec0c11a68e8800042c68ecbfe934
             ,[UID , username , Report]
         )
     }
