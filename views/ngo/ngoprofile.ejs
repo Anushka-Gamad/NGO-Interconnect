@@ -11,12 +11,22 @@
                 <div class="col-lg-4">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <img src=<%=data.ngo.ngo_image? data.ngo.ngo_image : "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"%>
-                            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                            <img src=<%=data.ngo.ngo_image? data.ngo.ngo_image : "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"%>  alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+
                             <h5 class="my-3"> <%= data.ngo.ngo_name %> </h5>
                             <p class="text-muted mb-4">
                                 <%= data.ngo.ngo_city %>, <%= data.ngo.ngo_state %>
                             </p>
+                           <% if(data.ngo.verify=='V') {%>
+                            <img src=" https://t3.ftcdn.net/jpg/04/06/15/40/360_F_406154090_rkriySX3dV4KkKwVq0ZLf3Igr956JvU1.jpg" 
+                            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+
+                           <% } %>
+                           <% if(!data.ngo.verify) {%>
+                            <img src=" https://p.kindpng.com/picc/s/343-3432470_circle-hd-png-download.png"
+                            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+
+                           <% } %>
                             <% if(userLoggedIn.type =='A') { %>
                                 <a href="/delete/<%= data.ngo.ngo_username%>" class="btn btn-outline-danger">Delete</a>
                             <% } %> 
@@ -60,6 +70,34 @@
                             <% } %>
                             <% if (userLoggedIn.type=='N' && userLoggedIn.username == data.ngo.ngo_username ) { %>
                                 <a href="/viewmembers/<%= data.ngo.ngo_username%>" class="btn btn-success">View Members</a>
+                                <div class="btn-group dropend ps-2">
+                                    <% if(!data.ngo.verify) {%>
+
+                                    <a href="/OTPtest/<%= data.ngo.ngo_username%>" class="btn btn-md btn-warning fw-bold bg-white">Get OTP</a>
+
+                                    <div class="row">
+                                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                           &nbsp;  verify mail
+                                        </button>
+                                    <form action="/verify/<%= data.ngo.ngo_username%>" method="post"
+                                        class="dropdown-menu p-4">
+                                        <div class="mb-3">
+                                            <label for="Report" class="form-label"> Enter OTP</label>
+                                            <input type="text" class="form-control" name="OTP" id="OTP"
+                                            placeholder="Enter OTP" required>
+                                        </div>
+                                        <div class="text-right">
+
+                                            <button type="submit" class="btn btn-success float-end">Submit</button>
+
+                                        </div>
+                                   
+
+                                    </form>
+
+                                </div>
+                                <% } %>
+                                </div>
                             <% } %>
                         </div>
 
@@ -115,8 +153,7 @@
                                     <div class="card text-white bg-success mb-4 mb-md-4">
                                         <div class="card-body text-center">
                                             <img src=<%=drive.drive_image?
-                                                drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                                                %>
+                                                drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"  %>
                                             alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
                                             <h5 class="my-3">
                                                 <%= drive.drive_name %>
@@ -130,9 +167,10 @@
                                     <% } else { %>
                                         <div class="card mb-4 mb-md-4">
                                             <div class="card-body text-center">
-                                                <img src=<%=drive.drive_image?
-                                                    drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                                                    %>
+                                                <img src=<%=drive.drive_image? drive.drive_image:"https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" %>
+
+
+                                                   
                                                 alt="avatar" class="rounded-circle img-fluid" style="width:
                                                 105px;">
                                                 <h5 class="my-3">

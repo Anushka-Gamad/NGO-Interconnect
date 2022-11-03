@@ -1,7 +1,8 @@
 const nodemailer = require('nodemailer');
 const getOTP = require('./generateOtpSevice');
+const client = require('../database/pgdatabase')
 
-const emailService = (sendTo) => {
+const emailService = async(sendTo,username) => {
     const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -10,6 +11,11 @@ const emailService = (sendTo) => {
         }
     });
     const otp = getOTP();
+
+    const data = await client.query(
+        "UPDATE superuser SET otp = $1 WHERE user_name  = $2 ;", [otp ,username]
+    )
+    
     const mailOptions = {
         from: "ngointerconnect2022@gmail.com",
         to: sendTo,

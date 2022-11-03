@@ -10,6 +10,8 @@ const cors = require('cors');
 const emailService = require('./service/emailService');
 const { AuthenticationMD5Password } = require('pg-protocol/dist/messages');
 const pgSession = require('connect-pg-simple')(session);
+const { verify } = require('crypto');
+
 require('dotenv').config()
 
 const app = express()
@@ -531,14 +533,89 @@ app.get("/", (req,res) => {
     res.render("home");
 })
 
-app.get("/OTPtest", (req, res) => {
-    emailService("niketpathak08@gmail.com");
+app.get("/OTPtest/:id", async(req, res) => {
+    const {id } = req.params
+    const datango = await client.query(
+        "select * from ngo where ngo_username = $1 ;" , [id]
+    )
+    const UID = datango.rows[0].ngo_mail
 
-    res.redirect('/')
+    emailService(UID,id)
+   
+})
+app.get("/OTPtestuser/:id", async(req, res) => {
+    const {id } = req.params
+    const datango = await client.query(
+        "select * from person where user_name = $1 ;" , [id]
+    )
+    const UID = datango.rows[0].user_mail
+
+    emailService(UID,id)
+   
 })
 
+app.post("/verify/:username", async(req,res)=>{
+    const { username } = req.params
+    const { OTP } = req.body;
+    if(OTP == null ){
+        res.sendStatus(403)
+     }
+     const data = await client.query(
+        "select * from superuser where user_name = $1 ;" , [username]
+    )
 
+    try{
+        if(OTP==data.rows[0].otp)
+        {
+            const data = await client.query(
+                "UPDATE ngo SET verify = 'V' WHERE ngo_username  = $1 ;", [username]
+            )
+        }
+        else
+        {
+            res.redirect(`/ngo/${username}`)
 
+        }
+        
+       
+    }
+    catch(e){
+
+        console.error(e.message)
+    }
+    res.redirect(`/ngo/${username}`)
+})
+app.post("/verifyuser/:username", async(req,res)=>{
+    const { username } = req.params
+    const { OTP } = req.body;
+    if(OTP == null ){
+        res.sendStatus(403)
+     }
+     const data = await client.query(
+        "select * from superuser where user_name = $1 ;" , [username]
+    )
+
+    try{
+        if(OTP==data.rows[0].otp)
+        {
+            const data = await client.query(
+                "UPDATE person SET verify = 'V' WHERE user_name  = $1 ;", [username]
+            )
+        }
+        else
+        {
+            res.redirect(`/person/${username}`)
+
+        }
+        
+       
+    }
+    catch(e){
+
+        console.error(e.message)
+    }
+    res.redirect(`/ngo/${username}`)
+})
 app.listen(3000, ()=>{
     console.log("Listening on port 3000");
 })
