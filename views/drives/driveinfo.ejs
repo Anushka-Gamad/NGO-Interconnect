@@ -80,6 +80,9 @@
                                     <% } %>
                                     <% if (userLoggedIn.type=='P') { %>
                                         <a type="button" href="/connect/<%= drive.drive_id %>" class="btn btn-success col-md-6">Register</a>
+                                        <% } %>
+                                    <% if (userLoggedIn.type=='A') { %>
+                                        <a type="button" href="/deleteDrive/<%= drive.drive_id %>" class="btn btn-outline-danger col-md-6">Delete</a>
                                     <% } %>
                                 <% } else { %>
                                     <a type="button" href="/login" class="btn btn-success col-md-6">Login</a>

@@ -533,6 +533,7 @@ app.get("/", (req,res) => {
 
 app.get("/OTPtest", (req, res) => {
     emailService("niketpathak08@gmail.com");
+    res.redirect('/')
 })
 
 
