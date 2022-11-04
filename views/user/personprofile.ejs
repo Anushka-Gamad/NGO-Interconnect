@@ -11,9 +11,52 @@
                             <h5 class="my-3"><%= data.person.user_first_name%> <%= data.person.user_middle_name %> <%= data.person.user_last_name %> </h5>
                             <p class="text-muted mb-4"><%= data.person.user_city %>,  <%= data.person.user_state %> </p>
                             <div class="d-flex justify-content-center mb-2">
-                                <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                                                               <% if(data.person.verify=='V') {%>
+                                    <img src=" https://t3.ftcdn.net/jpg/04/06/15/40/360_F_406154090_rkriySX3dV4KkKwVq0ZLf3Igr956JvU1.jpg" 
+                                    alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+        
+                                   <% } %>
+                                   <% if(!data.person.verify) {%>
+                                    <img src=" https://p.kindpng.com/picc/s/343-3432470_circle-hd-png-download.png"
+                                    alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+        
+                                   <% } %>
                             </div>
-                        </div>
+                        
+
+                                <% if(!data.person.verify &&  userLoggedIn.username == data.person.user_name ) {%>
+
+    
+                                    <div class="row">
+                                        <a href="/OTPtestuser/<%= data.person.user_name%>" class="btn btn-md btn-warning fw-bold bg-white">Get OTP</a>
+
+                                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                           &nbsp;  verify mail
+                                        </button>
+                                       <form action="/verifyuser/<%= data.person.user_name%>" method="post"
+                                        class="dropdown-menu p-4">
+                                        <div class="mb-3">
+                                            <label for="Report" class="form-label"> Enter OTP</label>
+                                            <input type="text" class="form-control" name="OTP" id="OTP"
+                                            placeholder="Enter OTP" required>
+                                        </div>
+                                        <div class="text-right">
+    
+                                            <button type="submit" class="btn btn-success float-end">Submit</button>
+    
+                                        </div>
+                                   
+    
+                                        </form>
+    
+                                    </div>
+                                    <% } %>
+    
+    
+                            
+                                                            
+
+                     </div>
                     </div>
                     <div class="card mb-4 mb-lg-0">
                         <div class="card-body">

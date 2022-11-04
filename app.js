@@ -7,7 +7,11 @@ const flash = require('connect-flash');
 const client = require('./database/pgdatabase')
 const bcrypt = require('bcryptjs')
 const cors = require('cors');
+const emailService = require('./service/emailService');
+const { AuthenticationMD5Password } = require('pg-protocol/dist/messages');
 const pgSession = require('connect-pg-simple')(session);
+const { verify } = require('crypto');
+
 require('dotenv').config()
 
 const app = express()
@@ -85,12 +89,18 @@ app.post("/registerNGO", async(req,res)=>{
             const data = await client.query(
                 "insert into superuser (user_name, user_password, type_user) values($1, $2, $3) returning *", [username,hashedPassword,'N']
             )
-            await client.query(
-                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 , $11);", [govtId, username, ngoName, organization, ngoMail, add1+(add2?" "+add2:""), city, state, zipCode, phoneNumber , ngoImage]
+            const data2 = await client.query(
+                "insert into ngo values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 , $11) returning *", [govtId, username, ngoName, organization, ngoMail, add1+(add2?" "+add2:""), city, state, zipCode, phoneNumber , ngoImage]
             )
 
             if (data.rows.length === 0) {
                 res.sendStatus(403)
+            }
+
+            if(data2.rows.length ===0){
+                await client.query(
+                    "delete from superuser where user_name = $1", [username]
+                )
             }
 
             const user = data.rows[0]
@@ -137,13 +147,19 @@ app.post("/registerUser", async(req,res)=>{
                 "insert into superuser (user_name, user_password , type_user) values($1, $2 , $3) returning *"
                 ,[username, hashedPassword, 'P']
             )
-            await client.query(
+            const data2 = await client.query(
                 "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 , $15);"
                 ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email,  add1+(add2?" "+add2:""), city, state, zipCode , userImage]
             )
 
             if (data.rows.length === 0) {
                 res.sendStatus(403)
+            }
+
+            if(data2.rows.length ===0){
+                await client.query(
+                    "delete from superuser where user_name = $1", [username]
+                )
             }
 
             const user = data.rows[0]
@@ -237,7 +253,7 @@ app.post("/drives", async(req,res)=>{
         
         const driveID = data.rows.drive_id
 
-        return res.send(data.rows)
+        // return res.send(data.rows)
 
         // console.log(driveID)
         
@@ -314,7 +330,68 @@ app.put("/drives/:id", async(req,res)=>{
     }
         
     res.redirect(`/drives/${id}`)
-})  
+})
+
+app.get('/ngo', async(req,res)=>{   
+    try{
+        const data = await client.query(
+            "SELECT * from ngo;"
+        )
+
+        const ngos = data.rows
+         
+        res.render('ngo/viewNgo', {ngos})
+    }catch (e) {
+        res.sendStatus(403)
+    }
+})
+
+app.get("/viewmembers/:ngoUname", async(req,res)=>{
+    const { ngoUname } = req.params
+
+    try{
+        const data = await client.query(
+            "SELECT * from member natural join person where ngo_username=$1;",[ngoUname]
+        )
+
+        const views = data.rows
+        
+        res.render('ngo/viewmembers', {views})
+    }catch (e) {
+        res.sendStatus(403)
+    }
+})
+
+app.get("/ngo/:id", async(req,res)=>{
+    const { id } = req.params
+    try{
+        const data2 = await client.query(
+            "select * from ngo where ngo_username = $1;", [id]
+        )
+
+        if(data2.rows.length == 0){
+            res.sendStatus(403)
+        }
+        const ngo = data2.rows[0]
+
+        const data1 = await client.query(
+            "select * from drives where ngo_username = $1;", [id]
+        )
+
+        const drives = data1.rows;
+
+        const data = {ngo,drives};
+
+        if(!req.session.user){
+            res.redirect('/login')
+        }else{
+            res.render("ngo/ngoprofile",{data});
+        }
+    }catch(e){
+        console.log(e)
+        res.sendStatus(403)
+    }
+})
 
 app.get("/connect/:id", async (req,res)=>{
     const { id } = req.params
@@ -328,7 +405,6 @@ app.get("/connect/:id", async (req,res)=>{
             "select * from person where user_name = $1 ;" , [req.session.user.username]
         )
 
-        // res.send(user)
         const user_id = data.rows[0].user_id
 
         const data1 = await client.query(
@@ -343,39 +419,97 @@ app.get("/connect/:id", async (req,res)=>{
     res.redirect('/drives')
 })
 
-app.get("/ngoProfile", async(req,res) => {
+app.get("/member/:id", async (req,res)=>{
+    const { id } = req.params
+
+    const today = new Date()
+    const day = today.getDate()        
+    const month = today.getMonth()+1
+    const year = today.getFullYear()
     try{
-        const data2 = await client.query(
-            "select * from ngo where ngo_username = $1;", [req.session.user.username]
+        const data = await client.query(
+            "select * from person where user_name = $1 ;" ,[req.session.user.username] 
         )
 
-        if(data2.rows.length == 0){
-            res.sendStatus(403)
-        }
-        const ngo = data2.rows[0]
+        const datango = await client.query(
+            "select * from ngo where ngo_username = $1 ;" , [id]
+        )
+
+        const user_id = data.rows[0].user_id
+        const ngo_username  = datango.rows[0].ngo_username
 
         const data1 = await client.query(
-            "select * from drives where ngo_username = $1;", [req.session.user.username]
+            "insert into member (user_id, ngo_username, start_date) values($1, $2 , $3) returning * "
+            ,[user_id , ngo_username , (year + "-" + month + "-" + day) ]
         )
-
-        if(data1.rows.length == 0){
-            return res.send(data1)
-        }
-        const drives = data1.rows;
-
-        const data = {ngo,drives};
-
-        res.render("ngo/ngoprofile",{data});
+                        
     }catch(e){
-        console.log(e)
-        res.sendStatus(403)
+        console.error(e.message)
     }
+    
+    res.redirect('/ngo')
 })
 
-app.get("/personProfile", async(req,res) => {
+app.post("/donate/:id", async(req,res)=>{
+    const { id } = req.params
+    const {amount} = req.body;
+    const today = new Date()
+    const day = today.getDate()        
+    const month = today.getMonth()+1
+    const year = today.getFullYear()
+
+    if(amount == null || amount<=0){
+        res.sendStatus(403)
+
+    }
+    try{
+        const data = await client.query(
+            "select * from person where user_name = $1 ;", [req.session.user.username]
+        )
+
+        const user_id = data.rows[0].user_id
+        
+        const data1 = await client.query(
+            "insert into donate (user_id, ngo_username,amount,pay_date) values($1, $2 , $3, $4) returning * "
+            ,[user_id , id , amount, (year + "-" + month + "-" + day) ]
+        )
+    }
+    catch(e){
+
+        console.error(e.message)
+    }
+    res.redirect(`/ngo/${id}`)
+})
+
+app.post("/report/:username", async(req,res)=>{
+    const { username } = req.params
+    const { Report } = req.body;
+    if(Report == null ){
+        res.sendStatus(403)
+     }
+    try{
+        const data = await client.query(
+            "select * from person where user_name = $1 ;", [req.session.user.username]
+        )
+        const UID = data.rows[0].user_id
+        
+        const data1 = await client.query(
+            "insert into report (user_id, ngo_username,description) values($1, $2 , $3) returning * "
+            ,[UID , username , Report]
+        )
+    }
+    catch(e){
+
+        console.error(e.message)
+    }
+    res.redirect(`/ngo/${username}`)
+})
+
+app.get("/person/:id", async(req,res) => {
+    const {id } = req.params
     try{
         const data0 = await client.query(
-            "select * from person where user_name = $1;", [req.session.user.username]
+            "select * from person where user_name = $1;", [id]
         )
         if(data0.rows.length == 0){
             res.sendStatus(403)
@@ -385,7 +519,6 @@ app.get("/personProfile", async(req,res) => {
             "select * from drives where drive_id in(select drive_id from connects_to where user_id = $1);",[person.user_id]
         )
 
-        // return res.send(data1)
         const drives = data1.rows;
 
         const data = {person, drives}
@@ -396,13 +529,93 @@ app.get("/personProfile", async(req,res) => {
     }
 })
 
-
 app.get("/", (req,res) => {
     res.render("home");
 })
 
+app.get("/OTPtest/:id", async(req, res) => {
+    const {id } = req.params
+    const datango = await client.query(
+        "select * from ngo where ngo_username = $1 ;" , [id]
+    )
+    const UID = datango.rows[0].ngo_mail
 
+    emailService(UID,id)
+   
+})
+app.get("/OTPtestuser/:id", async(req, res) => {
+    const {id } = req.params
+    const datango = await client.query(
+        "select * from person where user_name = $1 ;" , [id]
+    )
+    const UID = datango.rows[0].user_mail
 
+    emailService(UID,id)
+   
+})
+
+app.post("/verify/:username", async(req,res)=>{
+    const { username } = req.params
+    const { OTP } = req.body;
+    if(OTP == null ){
+        res.sendStatus(403)
+     }
+     const data = await client.query(
+        "select * from superuser where user_name = $1 ;" , [username]
+    )
+
+    try{
+        if(OTP==data.rows[0].otp)
+        {
+            const data = await client.query(
+                "UPDATE ngo SET verify = 'V' WHERE ngo_username  = $1 ;", [username]
+            )
+        }
+        else
+        {
+            res.redirect(`/ngo/${username}`)
+
+        }
+        
+       
+    }
+    catch(e){
+
+        console.error(e.message)
+    }
+    res.redirect(`/ngo/${username}`)
+})
+app.post("/verifyuser/:username", async(req,res)=>{
+    const { username } = req.params
+    const { OTP } = req.body;
+    if(OTP == null ){
+        res.sendStatus(403)
+     }
+     const data = await client.query(
+        "select * from superuser where user_name = $1 ;" , [username]
+    )
+
+    try{
+        if(OTP==data.rows[0].otp)
+        {
+            const data = await client.query(
+                "UPDATE person SET verify = 'V' WHERE user_name  = $1 ;", [username]
+            )
+        }
+        else
+        {
+            res.redirect(`/person/${username}`)
+
+        }
+        
+       
+    }
+    catch(e){
+
+        console.error(e.message)
+    }
+    res.redirect(`/ngo/${username}`)
+})
 app.listen(3000, ()=>{
     console.log("Listening on port 3000");
 })
