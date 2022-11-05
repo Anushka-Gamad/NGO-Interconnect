@@ -514,6 +514,37 @@ app.post("/donate/:id", async(req,res)=>{
     res.redirect(`/ngo/${id}`)
 })
 
+app.post("/feedback/:id", async(req,res)=>{
+    const { id } = req.params
+    const {feedback} = req.body;
+    const today = new Date()
+    const day = today.getDate()        
+    const month = today.getMonth()+1
+    const year = today.getFullYear()
+
+    if(feedback == null ){
+        res.sendStatus(403)
+
+    }
+    try{
+        const data = await client.query(
+            "select * from person where user_name = $1 ;", [req.session.user.username]
+        )
+
+        const user_id = data.rows[0].user_id
+        
+        const data1 = await client.query(
+            "insert into feedback (user_id, ngo_username,feedback_date,feedback) values($1, $2 , $3, $4) returning * "
+            ,[user_id , id , (year + "-" + month + "-" + day),feedback ]
+        )
+    }
+    catch(e){
+
+        console.error(e.message)
+    }
+    res.redirect(`/ngo/${id}`)
+})
+
 app.post("/report/:username", async(req,res)=>{
     const { username } = req.params
     const { Report } = req.body;
