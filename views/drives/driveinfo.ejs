@@ -77,7 +77,8 @@
                                 <% if (userLoggedIn) { %>
                                     <% if (userLoggedIn.username == drive.ngo_username) { %>
                                         <a type="button" href="/drives/<%= drive.drive_id %>/edit" class="btn btn-outline-danger col-md-6 me-3"> Edit </a>
-                                    <% } %>
+                                        <a type="button" href="/drives/<%= drive.drive_id %>/viewpaticipants" class="btn btn-outline-danger col-md-6 me-3"> View Participants </a>
+                                        <% } %>
                                     <% if (userLoggedIn.type=='P') { %>
                                         <a type="button" href="/connect/<%= drive.drive_id %>" class="btn btn-success col-md-6">Register</a>
                                         <% } %>

@@ -148,7 +148,7 @@ app.post("/registerUser", async(req,res)=>{
                 ,[username, hashedPassword, 'P']
             )
             const data2 = await client.query(
-                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 , $15);"
+                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 , $15) returning *"
                 ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email,  add1+(add2?" "+add2:""), city, state, zipCode , userImage]
             )
 
@@ -345,6 +345,39 @@ app.get('/ngo', async(req,res)=>{
         res.sendStatus(403)
     }
 })
+// ------------------------------------------------------------------------------
+app.get('/person/:id/participating', async(req,res)=>{   
+    try{
+        // const data = await client.query(
+        //     "SELECT * from Person;"
+        // )
+        const today = new Date()
+        const day = today.getDate()        
+        const month = today.getMonth()+1
+        const year = today.getFullYear()
+        const { id } = req.params
+        const data = await client.query("SELECT * from person p , connects_to c , drives d where p.user_name=$1 and c.user_id=p.user_id and c.drive_id = d.drive_id and d.drive_date > $2" , [id,(year + "-" + month + "-" + day)])
+
+        const drives = data.rows
+         
+        res.render('user/DrivesParticipation.ejs', {drives})
+    }catch (e) {
+        res.sendStatus(403)
+    }
+})
+
+app.get('/drives/:id/viewpaticipants', async(req,res)=>{   
+    const { id } = req.params
+    try{
+        const data = await client.query("SELECT * from person p , connects_to c where c.drive_id=$1 and c.user_id=p.user_id" , [id])
+        const persons = data.rows
+        res.render('drives/ViewParticipants.ejs', {persons})
+
+    }catch (e) {
+        res.sendStatus(403)
+    }
+})
+// ------------------------------------------------------------------------------
 
 app.get("/viewmembers/:ngoUname", async(req,res)=>{
     const { ngoUname } = req.params
