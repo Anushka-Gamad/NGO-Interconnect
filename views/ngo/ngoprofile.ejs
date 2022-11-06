@@ -23,134 +23,88 @@
                             </p>
                             <% if(data.ngo.verify=='V' ) {%>
                                 <img src=" https://t3.ftcdn.net/jpg/04/06/15/40/360_F_406154090_rkriySX3dV4KkKwVq0ZLf3Igr956JvU1.jpg"
-                                    alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-
-                                <% } %>
+                                    alt="avatar" class="rounded-circle img-fluid mb-3" style="width: 75px;">
+                            <% } %>
+                            <% if(!data.ngo.verify) {%>
+                                <img src=" https://p.kindpng.com/picc/s/343-3432470_circle-hd-png-download.png"
+                                    alt="avatar" class="rounded-circle img-fluid mb-3" style="width: 75px;">
+                            <% } %>
+                            <% if(userLoggedIn.type=='A' ) { %>
+                                <div>
+                                    <form class="col-md-12" action="/ngo/<%= data.ngo.ngo_username%>?_method=DELETE" method="post">
+                                        <button class="btn btn-outline-danger col-md-6">Delete</button>
+                                    </form>
+                                </div>
+                            <% } %>
+                            <% if (userLoggedIn.type=='P' ) { %>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <a href="/member/<%= data.ngo.ngo_username%>" class="btn btn-success">Connect</a>
+                                    <div class="btn-group dropend ps-2">
+                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Donate
+                                        </button>
+                                        <form action="/donate/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
+                                            <div class="mb-3">
+                                                <label for="amount" class="form-label">Amount</label>
+                                                <input type="integer" class="form-control" name="amount" id="amount" placeholder="Amount in Rupees" required>
+                                            </div>
+                                            <div class="text-right">
+                                                <button type="submit" class="btn btn-success float-end">Confirm</button>
+                                            </div>
+                                        </form>
+                                        <div class="btn-group dropend ps-2">
+                                            <button type="button" class="btn btn-primary dropdown-toggle rounded-1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Feedback
+                                            </button>
+                                            <form action="/feedback/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
+                                                <div class="mb-3">
+                                                    <label for="feedback" class="form-label">Give Feedback</label>
+                                                    <input type="text" class="form-control" name="feedback" id="feedback" placeholder="Feedback in words" required>
+                                                </div>
+                                                <div class="text-right">
+                                                    <button type="submit" class="btn btn-success float-end">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="btn-group dropend ps-2">
+                                            <button type="button" class="btn btn-danger dropdown-toggle rounded-1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Report
+                                            </button>
+                                            <form action="/report/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
+                                                <div class="mb-3">
+                                                    <label for="Report" class="form-label">Reason for Reporting NGO</label>
+                                                    <input type="text" class="form-control" name="Report" id="Report" placeholder="Description" required>
+                                                </div>
+                                                <div class="text-right">
+                                                    <button type="submit" class="btn btn-success float-end">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <% if (userLoggedIn.type=='N' && userLoggedIn.username==data.ngo.ngo_username ) { %>
+                                <a href="/viewmembers/<%= data.ngo.ngo_username%>" class="btn btn-success">View Members</a>
+                                <div class="btn-group dropend ps-2">
                                     <% if(!data.ngo.verify) {%>
-                                        <img src=" https://p.kindpng.com/picc/s/343-3432470_circle-hd-png-download.png"
-                                            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-
-                                        <% } %>
-                                            <% if(userLoggedIn.type=='A' ) { %>
-                                                <a href="/delete/<%= data.ngo.ngo_username%>"
-                                                    class="btn btn-outline-danger">Delete</a>
-                                                <% } %>
-                                                    <% if (userLoggedIn.type=='P' ) { %>
-                                                        <div class="d-flex justify-content-center mb-2">
-                                                            <a href="/member/<%= data.ngo.ngo_username%>"
-                                                                class="btn btn-success">Connect</a>
-
-                                                            <div class="btn-group dropend ps-2">
-                                                                <button type="button"
-                                                                    class="btn btn-secondary dropdown-toggle"
-                                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    Donate
-                                                                </button>
-                                                                <form action="/donate/<%= data.ngo.ngo_username%>"
-                                                                    method="post" class="dropdown-menu p-4">
-                                                                    <div class="mb-3">
-                                                                        <label for="amount"
-                                                                            class="form-label">Amount</label>
-                                                                        <input type="integer" class="form-control"
-                                                                            name="amount" id="amount"
-                                                                            placeholder="Amount in Rupees" required>
-                                                                    </div>
-                                                                    <div class="text-right">
-                                                                        <button type="submit"
-                                                                            class="btn btn-success float-end">Confirm</button>
-                                                                    </div>
-                                                                </form>
-                                                                <div class="btn-group dropend ps-2">
-                                                                    <button type="button"
-                                                                        class="btn btn-primary dropdown-toggle rounded-1"
-                                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                                        Feedback
-                                                                    </button>
-                                                                    <form action="/feedback/<%= data.ngo.ngo_username%>"
-                                                                        method="post" class="dropdown-menu p-4">
-                                                                        <div class="mb-3">
-                                                                            <label for="feedback"
-                                                                                class="form-label">Give Feedback</label>
-                                                                            <input type="text" class="form-control"
-                                                                                name="feedback" id="feedback"
-                                                                                placeholder="Feedback in words"
-                                                                                required>
-                                                                        </div>
-                                                                        <div class="text-right">
-                                                                            <button type="submit"
-                                                                                class="btn btn-success float-end">Submit</button>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                                <div class="btn-group dropend ps-2">
-                                                                    <button type="button"
-                                                                        class="btn btn-danger dropdown-toggle rounded-1"
-                                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                                        Report
-                                                                    </button>
-                                                                    <form action="/report/<%= data.ngo.ngo_username%>"
-                                                                        method="post" class="dropdown-menu p-4">
-                                                                        <div class="mb-3">
-                                                                            <label for="Report"
-                                                                                class="form-label">Reason for Reporting
-                                                                                NGO</label>
-                                                                            <input type="text" class="form-control"
-                                                                                name="Report" id="Report"
-                                                                                placeholder="Description" required>
-                                                                        </div>
-                                                                        <div class="text-right">
-                                                                            <button type="submit"
-                                                                                class="btn btn-success float-end">Submit</button>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <% } %>
-                                                            <% if (userLoggedIn.type=='N' &&
-                                                                userLoggedIn.username==data.ngo.ngo_username ) { %>
-                                                                <a href="/viewmembers/<%= data.ngo.ngo_username%>"
-                                                                    class="btn btn-success">View Members</a>
-                                                                <div class="btn-group dropend ps-2">
-                                                                    <% if(!data.ngo.verify) {%>
-
-                                                                        <a href="/OTPtest/<%= data.ngo.ngo_username%>"
-                                                                            class="btn btn-md btn-warning fw-bold bg-white">Get
-                                                                            OTP</a>
-
-                                                                        <div class="row">
-                                                                            <button type="button"
-                                                                                class="btn btn-danger dropdown-toggle"
-                                                                                data-bs-toggle="dropdown"
-                                                                                aria-expanded="false">
-                                                                                &nbsp; verify mail
-                                                                            </button>
-                                                                            <form
-                                                                                action="/verify/<%= data.ngo.ngo_username%>"
-                                                                                method="post" class="dropdown-menu p-4">
-                                                                                <div class="mb-3">
-                                                                                    <label for="Report"
-                                                                                        class="form-label"> Enter
-                                                                                        OTP</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control" name="OTP"
-                                                                                        id="OTP" placeholder="Enter OTP"
-                                                                                        required>
-                                                                                </div>
-                                                                                <div class="text-right">
-
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-success float-end">Submit</button>
-
-                                                                                </div>
-
-
-                                                                            </form>
-
-                                                                        </div>
-                                                                        <% } %>
-                                                                </div>
-                                                                <% } %>
+                                        <a href="/OTPtest/<%= data.ngo.ngo_username%>" class="btn btn-md btn-warning fw-bold bg-white">Get OTP</a>
+                                        <div class="row">
+                                            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                &nbsp; verify mail
+                                            </button>
+                                            <form action="/verify/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
+                                                <div class="mb-3">
+                                                    <label for="Report" class="form-label"> Enter OTP</label>
+                                                    <input type="text" class="form-control" name="OTP" id="OTP" placeholder="Enter OTP" required>
+                                                </div>
+                                                <div class="text-right">
+                                                    <button type="submit" class="btn btn-success float-end">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            <% } %>
                         </div>
 
                         <div class="card mb-4 mb-lg-0 ">
@@ -160,9 +114,7 @@
                                         <p class="mb-0">Email</p>
                                     </div>
                                     <div class="col-sm-9">
-                                        <p class="text-muted mb-0">
-                                            <%= data.ngo.ngo_mail %>
-                                        </p>
+                                        <p class="text-muted mb-0"> <%= data.ngo.ngo_mail %> </p>
                                     </div>
                                 </div>
                                 <hr>
@@ -171,9 +123,7 @@
                                         <p class="mb-0">Phone</p>
                                     </div>
                                     <div class="col-sm-9">
-                                        <p class="text-muted mb-0">
-                                            <%= data.ngo.ngo_contact %>
-                                        </p>
+                                        <p class="text-muted mb-0"> <%= data.ngo.ngo_contact %> </p>
                                     </div>
                                 </div>
                                 <hr>
@@ -183,9 +133,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <p class="text-muted mb-0">
-                                            <%= data.ngo.ngo_address %>
-                                                <%= data.ngo.ngo_city %>
-                                                    <%= data.ngo.ngo_state %>, <%= data.ngo.ngo_zip_code %>
+                                            <%= data.ngo.ngo_address %> <%= data.ngo.ngo_city %> <%= data.ngo.ngo_state %>, <%= data.ngo.ngo_zip_code %>
                                         </p>
                                     </div>
                                 </div>
@@ -214,33 +162,26 @@
                                                 <p class="text-white mb-1">
                                                     <%= drive.drive_date %>
                                                 </p>
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="card mb-4 mb-md-4">
+                                            <div class="card-body text-center">
+                                                <img src=<%=drive.drive_image? drive.drive_image:"https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" %>
+                                                    alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
+                                                <h5 class="my-3">
+                                                    <%= drive.drive_name %>
+                                                </h5>
+                                                <p class="mb-1">
+                                                    <%= drive.drive_date %>
+                                                </p>
                                                 <!-- <p class="text-white mb-4">City, State</p> -->
                                             </div>
                                         </div>
-                                        <% } else { %>
-                                            <div class="card mb-4 mb-md-4">
-                                                <div class="card-body text-center">
-                                                    <img src=<%=drive.drive_image?
-                                                        drive.drive_image:"https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                                                        %>
-
-
-
-                                                    alt="avatar" class="rounded-circle img-fluid" style="width:
-                                                    105px;">
-                                                    <h5 class="my-3">
-                                                        <%= drive.drive_name %>
-                                                    </h5>
-                                                    <p class="mb-1">
-                                                        <%= drive.drive_date %>
-                                                    </p>
-                                                    <!-- <p class="text-white mb-4">City, State</p> -->
-                                                </div>
-                                            </div>
-                                            <% } %>
-                                </div>
-                                <% i++; %>
                                     <% } %>
+                                </div>
+                            <% i++; %>
+                        <% } %>
                     </div>
                 </div>
             </div>
