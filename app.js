@@ -363,9 +363,16 @@ app.get("/ngo/:id", async(req,res)=>{
                 "select * from drives where ngo_username = $1;", [id]
             )
 
+            const data3 = await client.query(
+                "select p.user_name, r.description from report r, person p where r.ngo_username = $1 and r.user_id = p.user_id", [id]
+            )
+
             const drives = data1.rows;
 
-            const data = {ngo,drives};
+            const reports = data3.rows;
+
+            const data = {ngo, drives, reports};
+
             res.render("ngo/ngoprofile",{data});
         }
     }catch(e){
@@ -554,7 +561,6 @@ app.post("/donate/:id", async(req,res)=>{
         const invoice= data2.rows[0]
 
         res.render("ngo/donate_invoice",{invoice})
-         //res.send(invoice)
         }
     catch(e){
 

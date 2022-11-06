@@ -68,7 +68,7 @@
                                         </div>
                                         <div class="btn-group dropend ps-2">
                                             <button type="button" class="btn btn-danger dropdown-toggle rounded-1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Report
+                                                Report <sup><%= data.reports.length %></sup>
                                             </button>
                                             <form action="/report/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
                                                 <div class="mb-3">
@@ -162,6 +162,7 @@
                                                 <p class="text-white mb-1">
                                                     <%= drive.drive_date %>
                                                 </p>
+                                                <a class="stretched-link" href="/drives/<%= drive.drive_id %>"></a>
                                             </div>
                                         </div>
                                     <% } else { %>
@@ -175,7 +176,7 @@
                                                 <p class="mb-1">
                                                     <%= drive.drive_date %>
                                                 </p>
-                                                <!-- <p class="text-white mb-4">City, State</p> -->
+                                                <a class="stretched-link" href="/drives/<%= drive.drive_id %>"></a>
                                             </div>
                                         </div>
                                     <% } %>
@@ -183,6 +184,38 @@
                             <% i++; %>
                         <% } %>
                     </div>
+                </div>
+            </div>
+            <h2 class="fs-2 fw-bold my-3 p-1">Total number of reports are: <%= data.reports.length %> </h2>
+            <div class="container">
+                <div class="row my-2">
+                    <h2 class="fs-2 p-1 col-md-3">Reported By:</h2>
+                    <h2 class="fs-2 p-1 col-md-9">Description:</h2>
+                </div>
+            </div>
+            <% for(let report of data.reports){ %>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card-body">
+                                        <h4 class="card-title"><%= report.user_name %> </h4>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="card-body">
+                                        <p class="card-text"><%= report.description %> </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %> 
+            <div class="row">
+                <div class="col-md-12">
+
                 </div>
             </div>
         </div>
