@@ -367,11 +367,17 @@ app.get("/ngo/:id", async(req,res)=>{
                 "select p.user_name, r.description from report r, person p where r.ngo_username = $1 and r.user_id = p.user_id", [id]
             )
 
+            const data4 = await client.query(
+                "select p.user_name, f.feedback from feedback f, person p where f.ngo_username = $1 and f.user_id = p.user_id", [id]
+            )
+
             const drives = data1.rows;
 
             const reports = data3.rows;
 
-            const data = {ngo, drives, reports};
+            const feedbacks = data4.rows;
+
+            const data = {ngo, drives, reports, feedbacks};
 
             res.render("ngo/ngoprofile",{data});
         }
@@ -690,21 +696,6 @@ app.post("/verifyuser/:username", async(req,res)=>{
             console.error(e.message)
         }
     res.redirect(`/ngo/${username}`)
-})
-
-app.get("/date", async(req,res)=>{
-    try{
-        const data = await client.query(
-            "select * from connects_to"
-        )
-
-        const a = data.rows[0]
-
-        res.render('test', {a})
-
-    }catch(e){
-        console.log(e)
-    }
 })
 
 app.get("/", (req,res) => {

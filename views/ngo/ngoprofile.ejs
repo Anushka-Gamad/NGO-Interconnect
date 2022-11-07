@@ -92,27 +92,29 @@
                                 </div>
                             <% } %>
                             <% if (userLoggedIn.type=='N' && userLoggedIn.username==data.ngo.ngo_username ) { %>
-                                <a href="/viewmembers/<%= data.ngo.ngo_username%>" class="btn btn-success">View Members</a>
-                                <div class="btn-group dropend ps-2">
+                                <div class="row">
                                     <% if(!data.ngo.verify) {%>
-                                        <a href="/OTPtest/<%= data.ngo.ngo_username%>" class="btn btn-md btn-warning fw-bold bg-white">Get OTP</a>
-                                        <div class="row">
-                                            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                &nbsp; verify mail
-                                            </button>
-                                            <form action="/verify/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
-                                                <div class="mb-3">
-                                                    <label for="Report" class="form-label"> Enter OTP</label>
-                                                    <input type="text" class="form-control" name="OTP" id="OTP" placeholder="Enter OTP" required>
-                                                </div>
-                                                <div class="text-right">
-                                                    <button type="submit" class="btn btn-success float-end">Submit</button>
-                                                </div>
-                                            </form>
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <a href="/OTPtest/<%= data.ngo.ngo_username%>" class="btn btn-warning fw-bold bg-white col-md-6">Get OTP</a>
+                                            <div class="btn-group dropend ps-2 col-md-6">
+                                                <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    &nbsp; verify mail
+                                                </button>
+                                                <form action="/verify/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
+                                                    <div class="mb-3">
+                                                        <label for="Report" class="form-label"> Enter OTP</label>
+                                                        <input type="text" class="form-control" name="OTP" id="OTP" placeholder="Enter OTP" required>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     <% } %>
                                 </div>
-                            <% } %>
+                                <a href="/viewmembers/<%= data.ngo.ngo_username%>" class="btn btn-success col-md-6">View Members</a>
+                        <% } %>
                         </div>
 
                         <div class="card mb-4 mb-lg-0 ">
@@ -191,7 +193,6 @@
                 </div>
             </div>
             <% if (userLoggedIn && userLoggedIn.type=='A') { %>
-                
                 <h2 class="fs-2 fw-bold my-3 p-1">Total number of reports are: <%= data.reports.length %> </h2>
                 <div class="container">
                     <div class="row my-2">
@@ -212,6 +213,35 @@
                                     <div class="col-md-9">
                                         <div class="card-body">
                                             <p class="card-text"><%= report.description %> </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %> 
+            <% } %>
+
+            <% if (userLoggedIn && userLoggedIn.type=='N' && userLoggedIn.username==data.ngo.ngo_username) { %>
+                <div class="container">
+                    <div class="row my-2">
+                        <h2 class="fs-2 p-1 col-md-3">Feedback By:</h2>
+                        <h2 class="fs-2 p-1 col-md-9">Description:</h2>
+                    </div>
+                </div>
+                <% for(let feedback of data.feedbacks){ %>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="card-body">
+                                            <h4 class="card-title"><%= feedback.user_name %></h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <p class="card-text"><%= feedback.description %> </p>
                                         </div>
                                     </div>
                                 </div>
