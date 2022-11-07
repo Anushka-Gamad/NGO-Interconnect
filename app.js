@@ -148,7 +148,7 @@ app.post("/registerUser", async(req,res)=>{
                 ,[username, hashedPassword, 'P']
             )
             const data2 = await client.query(
-                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 , $15);"
+                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 , $15) returning *"
                 ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email,  add1+(add2?" "+add2:""), city, state, zipCode , userImage]
             )
 
@@ -249,23 +249,8 @@ app.post("/drives", async(req,res)=>{
     try{
         const data = await client.query(
             "insert into drives (drive_name, drive_type, ngo_username , drive_description , drive_date , drive_time , drive_location , drive_manager , drive_image) values($1, $2 , $3, $4, $5, $6 , $7, $8, $9 ) returning *"
-            ,[title , driveType, req.session.user.username , driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage])
-        
-        const driveID = data.rows.drive_id
-
-        // return res.send(data.rows)
-
-        // console.log(driveID)
-        
-        // const today = new Date()
-        // const day = today.getDate()        
-        // const month = today.getMonth()+1
-        // const year = today.getFullYear()
-
-        // const d1 = await client.query (
-        //     "insert into uploads (drive_id, ngo_username, upload_date) values ($1, $2, $3) returning *",
-        //     [driveID, req.session.user.username, (year + "-" + month + "-" + day)]
-        // )
+            ,[title , driveType, req.session.user.username , driveDescription , driveDate , driveTime  , driveVenue , driveManager , driveImage]
+        )
     }catch(e){
         console.error(e.message)
     }
@@ -332,6 +317,19 @@ app.put("/drives/:id", async(req,res)=>{
     res.redirect(`/drives/${id}`)
 })
 
+app.delete('/drives/:id', async(req,res)=>{
+    const {id} = req.params
+
+    try{
+        const data = await client.query(
+            "delete from drives where drive_id = $1 returning *",[id]
+        )
+    }catch(e){
+        console.log(e)
+    }
+    res.redirect('/drives');
+})
+
 app.get('/ngo', async(req,res)=>{   
     try{
         const data = await client.query(
@@ -346,6 +344,118 @@ app.get('/ngo', async(req,res)=>{
     }
 })
 
+app.get("/ngo/:id", async(req,res)=>{
+    const { id } = req.params
+    try{
+        if(!req.session.user){
+            res.redirect('/login')
+        }else{
+            const data2 = await client.query(
+                "select * from ngo where ngo_username = $1;", [id]
+            )
+
+            if(data2.rows.length == 0){
+                res.sendStatus(403)
+            }
+            const ngo = data2.rows[0]
+
+            const data1 = await client.query(
+                "select * from drives where ngo_username = $1;", [id]
+            )
+
+            const data3 = await client.query(
+                "select p.user_name, r.description from report r, person p where r.ngo_username = $1 and r.user_id = p.user_id", [id]
+            )
+
+            const drives = data1.rows;
+
+            const reports = data3.rows;
+
+            const data = {ngo, drives, reports};
+
+            res.render("ngo/ngoprofile",{data});
+        }
+    }catch(e){
+        console.log(e)
+        res.sendStatus(403)
+    }
+})
+
+app.delete('/ngo/:id', async(req,res)=>{
+    const {id} = req.params
+
+    try{
+        const data = await client.query(
+            "delete from ngo where ngo_username = $1 returning *",[id]
+        )
+
+    }catch(e){
+        console.log(e)
+    }
+    res.redirect('/ngo');
+})
+
+app.get("/person/:id", async(req,res) => {
+    const {id } = req.params
+    try{
+        if(!req.session.user){
+            res.redirect('/login')
+        }else{
+            const data0 = await client.query(
+                "select * from person where user_name = $1;", [id]
+            )
+            if(data0.rows.length == 0){
+                res.sendStatus(403)
+            }
+            const person = data0.rows[0]
+            const data1 = await client.query(
+                "select * from drives where drive_id in(select drive_id from connects_to where user_id = $1);",[person.user_id]
+            )
+    
+            const drives = data1.rows;
+    
+            const data = {person, drives}
+            res.render("user/personprofile", {data});
+        }
+    }catch(e){
+        console.log(e)
+        res.sendStatus(403)
+    }
+})
+
+app.get('/person/:id/participating', async(req,res)=>{   
+    try{
+        const today = new Date()
+        const day = today.getDate()        
+        const month = today.getMonth()+1
+        const year = today.getFullYear()
+        const { id } = req.params
+        const data = await client.query(
+            "SELECT * from person p , connects_to c , drives d where p.user_name=$1 and c.user_id=p.user_id and c.drive_id = d.drive_id and d.drive_date > $2" , 
+                [id, (year + "-" + month + "-" + day)]
+            )
+
+        const drives = data.rows
+         
+        res.render('user/DrivesParticipation.ejs', {drives})
+    }catch (e) {
+        res.sendStatus(403)
+    }
+})
+
+app.get('/drives/:id/viewpaticipants', async(req,res)=>{   
+    const { id } = req.params
+    try{
+        const data = await client.query("SELECT * from person p , connects_to c where c.drive_id=$1 and c.user_id=p.user_id" , [id])
+        const persons = data.rows
+        res.render('drives/ViewParticipants.ejs', {persons})
+
+    }catch (e) {
+        res.sendStatus(403)
+    }
+})
+// ------------------------------------------------------------------------------
+
 app.get("/viewmembers/:ngoUname", async(req,res)=>{
     const { ngoUname } = req.params
 
@@ -358,37 +468,6 @@ app.get("/viewmembers/:ngoUname", async(req,res)=>{
         
         res.render('ngo/viewmembers', {views})
     }catch (e) {
-        res.sendStatus(403)
-    }
-})
-
-app.get("/ngo/:id", async(req,res)=>{
-    const { id } = req.params
-    try{
-        const data2 = await client.query(
-            "select * from ngo where ngo_username = $1;", [id]
-        )
-
-        if(data2.rows.length == 0){
-            res.sendStatus(403)
-        }
-        const ngo = data2.rows[0]
-
-        const data1 = await client.query(
-            "select * from drives where ngo_username = $1;", [id]
-        )
-
-        const drives = data1.rows;
-
-        const data = {ngo,drives};
-
-        if(!req.session.user){
-            res.redirect('/login')
-        }else{
-            res.render("ngo/ngoprofile",{data});
-        }
-    }catch(e){
-        console.log(e)
         res.sendStatus(403)
     }
 })
@@ -466,12 +545,47 @@ app.post("/donate/:id", async(req,res)=>{
         const data = await client.query(
             "select * from person where user_name = $1 ;", [req.session.user.username]
         )
+       
+        const user_id = data.rows[0].user_id
+        
+        const data1 = await client.query(
+            "insert into donate(user_id, ngo_username,amount,pay_date) values($1, $2 , $3, $4) returning * "
+            ,[ user_id ,id , amount , (year + "-" + month + "-" + day) ]
+        )
+        
+        const invoice= data1.rows[0]
+
+        res.render("ngo/donate_invoice",{invoice})
+        }
+    catch(e){
+
+        console.error(e.message)
+    }
+   
+})
+
+app.post("/feedback/:id", async(req,res)=>{
+    const { id } = req.params
+    const {feedback} = req.body;
+    const today = new Date()
+    const day = today.getDate()        
+    const month = today.getMonth()+1
+    const year = today.getFullYear()
+
+    if(feedback == null ){
+        res.sendStatus(403)
+
+    }
+    try{
+        const data = await client.query(
+            "select * from person where user_name = $1 ;", [req.session.user.username]
+        )
 
         const user_id = data.rows[0].user_id
         
         const data1 = await client.query(
-            "insert into donate (user_id, ngo_username,amount,pay_date) values($1, $2 , $3, $4) returning * "
-            ,[user_id , id , amount, (year + "-" + month + "-" + day) ]
+            "insert into feedback (user_id, ngo_username,feedback_date,feedback) values($1, $2 , $3, $4) returning * "
+            ,[user_id , id , (year + "-" + month + "-" + day),feedback ]
         )
     }
     catch(e){
@@ -505,53 +619,25 @@ app.post("/report/:username", async(req,res)=>{
     res.redirect(`/ngo/${username}`)
 })
 
-app.get("/person/:id", async(req,res) => {
-    const {id } = req.params
-    try{
-        const data0 = await client.query(
-            "select * from person where user_name = $1;", [id]
-        )
-        if(data0.rows.length == 0){
-            res.sendStatus(403)
-        }
-        const person = data0.rows[0]
-        const data1 = await client.query(
-            "select * from drives where drive_id in(select drive_id from connects_to where user_id = $1);",[person.user_id]
-        )
-
-        const drives = data1.rows;
-
-        const data = {person, drives}
-        res.render("user/personprofile", {data});
-    }catch(e){
-        console.log(e)
-        res.sendStatus(403)
-    }
-})
-
-app.get("/", (req,res) => {
-    res.render("home");
-})
-
 app.get("/OTPtest/:id", async(req, res) => {
     const {id } = req.params
     const datango = await client.query(
         "select * from ngo where ngo_username = $1 ;" , [id]
     )
     const UID = datango.rows[0].ngo_mail
-
-    emailService(UID,id)
-   
+    
+    emailService(UID,id) 
 })
+
 app.get("/OTPtestuser/:id", async(req, res) => {
     const {id } = req.params
     const datango = await client.query(
         "select * from person where user_name = $1 ;" , [id]
     )
     const UID = datango.rows[0].user_mail
-
+    
     emailService(UID,id)
-   
+    
 })
 
 app.post("/verify/:username", async(req,res)=>{
@@ -559,63 +645,58 @@ app.post("/verify/:username", async(req,res)=>{
     const { OTP } = req.body;
     if(OTP == null ){
         res.sendStatus(403)
-     }
-     const data = await client.query(
+    }
+    const data = await client.query(
         "select * from superuser where user_name = $1 ;" , [username]
-    )
-
-    try{
-        if(OTP==data.rows[0].otp)
-        {
+        )
+        
+        try{
+        if(OTP==data.rows[0].otp){
             const data = await client.query(
                 "UPDATE ngo SET verify = 'V' WHERE ngo_username  = $1 ;", [username]
             )
         }
-        else
-        {
-            res.redirect(`/ngo/${username}`)
-
-        }
-        
-       
+        else{
+            res.redirect(`/ngo/${username}`)   
+        }      
     }
     catch(e){
-
         console.error(e.message)
     }
     res.redirect(`/ngo/${username}`)
 })
+
 app.post("/verifyuser/:username", async(req,res)=>{
     const { username } = req.params
     const { OTP } = req.body;
     if(OTP == null ){
         res.sendStatus(403)
-     }
-     const data = await client.query(
+    }
+    const data = await client.query(
         "select * from superuser where user_name = $1 ;" , [username]
-    )
-
-    try{
-        if(OTP==data.rows[0].otp)
-        {
-            const data = await client.query(
-                "UPDATE person SET verify = 'V' WHERE user_name  = $1 ;", [username]
-            )
-        }
-        else
-        {
-            res.redirect(`/person/${username}`)
-
-        }
+        )
         
-       
-    }
-    catch(e){
-
-        console.error(e.message)
-    }
+        try{
+            if(OTP==data.rows[0].otp){
+                const data = await client.query(
+                    "UPDATE person SET verify = 'V' WHERE user_name  = $1 ;", [username]
+                )
+            }
+            else{
+                res.redirect(`/person/${username}`)
+            }  
+        }
+        catch(e){
+            console.error(e.message)
+        }
     res.redirect(`/ngo/${username}`)
 })
+
+
+app.get("/", (req,res) => {
+    res.render("home");
+})
+
 app.listen(3000, ()=>{
     console.log("Listening on port 3000");
 })
