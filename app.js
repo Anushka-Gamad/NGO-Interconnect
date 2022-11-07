@@ -695,7 +695,7 @@ app.post("/verifyuser/:username", async(req,res)=>{
         catch(e){
             console.error(e.message)
         }
-    res.redirect(`/ngo/${username}`)
+    res.redirect(`/person/${username}`)
 })
 
 app.get("/", (req,res) => {
