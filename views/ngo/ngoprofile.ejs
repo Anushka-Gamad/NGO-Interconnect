@@ -15,20 +15,22 @@
                                 : "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
                                 %> alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
 
-                            <h5 class="my-3">
-                                <%= data.ngo.ngo_name %>
-                            </h5>
+                            <div class="d-flex justify-content-center">
+                                <h5 class="my-2 fs-3">
+                                    <%= data.ngo.ngo_name %>
+                                    <% if(data.ngo.verify=='V' ) {%>
+                                        <img src=" https://t3.ftcdn.net/jpg/04/06/15/40/360_F_406154090_rkriySX3dV4KkKwVq0ZLf3Igr956JvU1.jpg"
+                                            alt="avatar" class="rounded-circle img-fluid" style="width: 40px; height: 37px;" >
+                                    <% } %>
+                                    <% if(!data.ngo.verify) {%>
+                                        <img src=" https://p.kindpng.com/picc/s/343-3432470_circle-hd-png-download.png"
+                                            alt="avatar" class="rounded-circle img-fluid" style="width: 40px; height: 37px;">
+                                    <% } %>
+                                </h5>
+                            </div>
                             <p class="text-muted mb-4">
                                 <%= data.ngo.ngo_city %>, <%= data.ngo.ngo_state %>
                             </p>
-                            <% if(data.ngo.verify=='V' ) {%>
-                                <img src=" https://t3.ftcdn.net/jpg/04/06/15/40/360_F_406154090_rkriySX3dV4KkKwVq0ZLf3Igr956JvU1.jpg"
-                                    alt="avatar" class="rounded-circle img-fluid mb-3" style="width: 75px;">
-                            <% } %>
-                            <% if(!data.ngo.verify) {%>
-                                <img src=" https://p.kindpng.com/picc/s/343-3432470_circle-hd-png-download.png"
-                                    alt="avatar" class="rounded-circle img-fluid mb-3" style="width: 75px;">
-                            <% } %>
                             <% if(userLoggedIn.type=='A' ) { %>
                                 <div>
                                     <form class="col-md-12" action="/ngo/<%= data.ngo.ngo_username%>?_method=DELETE" method="post">
@@ -37,23 +39,29 @@
                                 </div>
                             <% } %>
                             <% if (userLoggedIn.type=='P' ) { %>
-                                <div class="d-flex justify-content-center mb-2">
-                                    <a href="/member/<%= data.ngo.ngo_username%>" class="btn btn-success">Connect</a>
-                                    <div class="btn-group dropend ps-2">
-                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Donate
-                                        </button>
-                                        <form action="/donate/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
-                                            <div class="mb-3">
-                                                <label for="amount" class="form-label">Amount</label>
-                                                <input type="integer" class="form-control" name="amount" id="amount" placeholder="Amount in Rupees" required>
-                                            </div>
-                                            <div class="text-right">
-                                                <button type="submit" class="btn btn-success float-end">Confirm</button>
-                                            </div>
-                                        </form>
-                                        <div class="btn-group dropend ps-2">
-                                            <button type="button" class="btn btn-primary dropdown-toggle rounded-1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="row">
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <a href="/member/<%= data.ngo.ngo_username%>" class="btn btn-success col-md-6">Connect</a>
+                                        <div class="btn-group dropend ps-2 col-md-6">
+                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Donate
+                                            </button>
+                                            <form action="/donate/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
+                                                <div class="mb-3">
+                                                    <label for="amount" class="form-label">Amount</label>
+                                                    <input type="integer" class="form-control" name="amount" id="amount" placeholder="Amount in Rupees" required>
+                                                </div>
+                                                <div class="text-right">
+                                                    <button type="submit" class="btn btn-secondary float-end">Confirm</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <div class="btn-group dropend col-md-6">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Feedback
                                             </button>
                                             <form action="/feedback/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
@@ -62,12 +70,12 @@
                                                     <input type="text" class="form-control" name="feedback" id="feedback" placeholder="Feedback in words" required>
                                                 </div>
                                                 <div class="text-right">
-                                                    <button type="submit" class="btn btn-success float-end">Submit</button>
+                                                    <button type="submit" class="btn btn-primary float-end">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
-                                        <div class="btn-group dropend ps-2">
-                                            <button type="button" class="btn btn-danger dropdown-toggle rounded-1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="btn-group dropend ps-2 col-md-6">
+                                            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Report <sup><%= data.reports.length %></sup>
                                             </button>
                                             <form action="/report/<%= data.ngo.ngo_username%>" method="post" class="dropdown-menu p-4">
@@ -76,7 +84,7 @@
                                                     <input type="text" class="form-control" name="Report" id="Report" placeholder="Description" required>
                                                 </div>
                                                 <div class="text-right">
-                                                    <button type="submit" class="btn btn-success float-end">Submit</button>
+                                                    <button type="submit" class="btn btn-danger float-end">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -156,12 +164,10 @@
                                                     drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
                                                     %>
                                                 alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
-                                                <h5 class="my-3">
-                                                    <%= drive.drive_name %>
-                                                </h5>
-                                                <p class="text-white mb-1">
-                                                    <%= drive.drive_date %>
-                                                </p>
+                                                <h5 class="my-3"> <%= drive.drive_name %></h5>
+                                                <p class="text-white mb-1"><%= drive.drive_date.toString().substring(0,15) %></p>
+                                                <p class="text-white mb-1"><%= drive.drive_time%></p>
+                                                <p class="text-white mb-1"><%= drive.drive_type%></p>
                                                 <a class="stretched-link" href="/drives/<%= drive.drive_id %>"></a>
                                             </div>
                                         </div>
@@ -170,12 +176,10 @@
                                             <div class="card-body text-center">
                                                 <img src=<%=drive.drive_image? drive.drive_image:"https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" %>
                                                     alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
-                                                <h5 class="my-3">
-                                                    <%= drive.drive_name %>
-                                                </h5>
-                                                <p class="mb-1">
-                                                    <%= drive.drive_date %>
-                                                </p>
+                                                <h5 class="my-3"><%= drive.drive_name %></h5>
+                                                <p class="mb-1"><%= drive.drive_date.toString().substring(0,15) %></p>
+                                                <p class="mb-1"><%= drive.drive_time%></p>
+                                                <p class="mb-1"><%= drive.drive_type%></p>
                                                 <a class="stretched-link" href="/drives/<%= drive.drive_id %>"></a>
                                             </div>
                                         </div>

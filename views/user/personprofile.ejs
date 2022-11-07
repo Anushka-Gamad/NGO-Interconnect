@@ -8,36 +8,37 @@
                         <div class="card-body text-center">
                             <img src=<%= (data.person.user_image? data.person.user_image : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png") %>  
                                 alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                            <h5 class="my-3"><%= data.person.user_first_name%> <%= data.person.user_middle_name %> <%= data.person.user_last_name %> </h5>
-                            <p class="text-muted mb-4"><%= data.person.user_city %>,  <%= data.person.user_state %> </p>
-                            <div class="d-flex justify-content-center mb-2">
+                            <h5 class="my-3 fs-3">
+                                <%= data.person.user_first_name%> <%= data.person.user_middle_name %> <%= data.person.user_last_name %> 
                                 <% if(data.person.verify=='V') {%>
                                     <img src=" https://t3.ftcdn.net/jpg/04/06/15/40/360_F_406154090_rkriySX3dV4KkKwVq0ZLf3Igr956JvU1.jpg" 
-                                    alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                    alt="avatar" class="rounded-circle img-fluid" style="width: 40px; height: 37;">
                                 <% } %>
                                 <% if(!data.person.verify) {%>
                                     <img src=" https://p.kindpng.com/picc/s/343-3432470_circle-hd-png-download.png"
-                                    alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                    alt="avatar" class="rounded-circle img-fluid" style="width: 40px; height: 37;">
                                 <% } %>
-                            </div>
+                            </h5>
+                            <p class="text-muted mb-4"><%= data.person.user_city %>,  <%= data.person.user_state %> </p>
                             <% if(!data.person.verify &&  userLoggedIn.username == data.person.user_name ) {%>
-                                <div class="row">
-                                    <a href="/OTPtestuser/<%= data.person.user_name%>" class="btn btn-md btn-warning fw-bold bg-white">Get OTP</a>
-
-                                    <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        &nbsp;  verify mail
-                                    </button>
-                                    <form action="/verifyuser/<%= data.person.user_name%>" method="post" class="dropdown-menu p-4">
-                                        <div class="mb-3">
-                                            <label for="Report" class="form-label"> Enter OTP</label>
-                                            <input type="text" class="form-control" name="OTP" id="OTP" placeholder="Enter OTP" required>
-                                        </div>
-                                        <div class="text-right">
-                                            <button type="submit" class="btn btn-success float-end">Submit</button>
-                                        </div>
-                                    </form>
-                                    <a type="button" href="/person/<%= data.person.user_name %>/participating" class="btn btn-outline-danger col-md-6 me-3">Participanting </a>
+                                <div class="row mb-3">
+                                    <a href="/OTPtestuser/<%= data.person.user_name%>" class="btn btn-md btn-warning fw-bold bg-white col-md-6">Get OTP</a>
+                                    <div class="btn-group dropend ps-2 col-md-6">
+                                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            &nbsp;  verify mail
+                                        </button>
+                                        <form action="/verifyuser/<%= data.person.user_name%>" method="post" class="dropdown-menu p-4">
+                                            <div class="mb-3">
+                                                <label for="Report" class="form-label"> Enter OTP</label>
+                                                <input type="text" class="form-control" name="OTP" id="OTP" placeholder="Enter OTP" required>
+                                            </div>
+                                            <div class="text-right">
+                                                <button type="submit" class="btn btn-success float-end">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
+                                <a type="button" href="/person/<%= data.person.user_name %>/participating" class="btn btn-success col-md-6 me-3">Participanting</a>
                             <% } %>
                         </div>
                     </div>
@@ -102,7 +103,9 @@
                                                 <img src=<%=drive.drive_image? drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"%>
                                                 alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
                                                 <h5 class="my-3"><%= drive.drive_name %></h5>
-                                                <p class="text-white mb-1"><%= drive.drive_date %></p>
+                                                <p class="text-white mb-1"><%= drive.drive_date.toString().substring(0,15) %></p>
+                                                <p class="text-white mb-1"><%= drive.drive_time%></p>
+                                                <p class="text-white mb-1"><%= drive.drive_type%></p>
                                                 <a class="stretched-link" href="/drives/<%= drive.drive_id %>"></a>
                                             </div>
                                         </div>
@@ -112,7 +115,9 @@
                                                 <img src=<%=drive.drive_image? drive.drive_image: "https://images.unsplash.com/photo-1535090042247-30387644aec5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bmdvfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"%>
                                                 alt="avatar" class="rounded-circle img-fluid" style="width: 105px;">
                                                 <h5 class="my-3"> <%= drive.drive_name %> </h5>
-                                                <p class="mb-1"><%= drive.drive_date %></p>
+                                                <p class="mb-1"><%= drive.drive_date.toString().substring(0,15) %></p>
+                                                <p class="mb-1"><%= drive.drive_time%></p>
+                                                <p class="mb-1"><%= drive.drive_type%></p>
                                                 <a class="stretched-link" href="/drives/<%= drive.drive_id %>"></a>
                                             </div>
                                         </div>

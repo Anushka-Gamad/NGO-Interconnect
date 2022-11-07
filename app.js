@@ -446,15 +446,17 @@ app.get('/person/:id/participating', async(req,res)=>{
 app.get('/drives/:id/viewpaticipants', async(req,res)=>{   
     const { id } = req.params
     try{
-        const data = await client.query("SELECT * from person p , connects_to c where c.drive_id=$1 and c.user_id=p.user_id" , [id])
-        const persons = data.rows
-        res.render('drives/ViewParticipants.ejs', {persons})
+        const data = await client.query(
+            "SELECT * from person p , connects_to c where c.drive_id=$1 and c.user_id=p.user_id" , [id]
+        )
 
+        const persons = data.rows
+
+        res.render('drives/ViewParticipants', {persons})
     }catch (e) {
         res.sendStatus(403)
     }
 })
-// ------------------------------------------------------------------------------
 
 app.get("/viewmembers/:ngoUname", async(req,res)=>{
     const { ngoUname } = req.params
@@ -552,13 +554,11 @@ app.post("/donate/:id", async(req,res)=>{
             "insert into donate(user_id, ngo_username,amount,pay_date) values($1, $2 , $3, $4) returning * "
             ,[ user_id ,id , amount , (year + "-" + month + "-" + day) ]
         )
-        
+
         const invoice= data1.rows[0]
 
         res.render("ngo/donate_invoice",{invoice})
-        }
-    catch(e){
-
+    }catch(e){
         console.error(e.message)
     }
    
@@ -692,6 +692,20 @@ app.post("/verifyuser/:username", async(req,res)=>{
     res.redirect(`/ngo/${username}`)
 })
 
+app.get("/date", async(req,res)=>{
+    try{
+        const data = await client.query(
+            "select * from connects_to"
+        )
+
+        const a = data.rows[0]
+
+        res.render('test', {a})
+
+    }catch(e){
+        console.log(e)
+    }
+})
 
 app.get("/", (req,res) => {
     res.render("home");
