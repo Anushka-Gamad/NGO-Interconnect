@@ -186,37 +186,35 @@
                     </div>
                 </div>
             </div>
-            <h2 class="fs-2 fw-bold my-3 p-1">Total number of reports are: <%= data.reports.length %> </h2>
-            <div class="container">
-                <div class="row my-2">
-                    <h2 class="fs-2 p-1 col-md-3">Reported By:</h2>
-                    <h2 class="fs-2 p-1 col-md-9">Description:</h2>
+            <% if (userLoggedIn && userLoggedIn.type=='A') { %>
+                
+                <h2 class="fs-2 fw-bold my-3 p-1">Total number of reports are: <%= data.reports.length %> </h2>
+                <div class="container">
+                    <div class="row my-2">
+                        <h2 class="fs-2 p-1 col-md-3">Reported By:</h2>
+                        <h2 class="fs-2 p-1 col-md-9">Description:</h2>
+                    </div>
                 </div>
-            </div>
-            <% for(let report of data.reports){ %>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="card">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="card-body">
-                                        <h4 class="card-title"><%= report.user_name %> </h4>
+                <% for(let report of data.reports){ %>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="card-body">
+                                            <h4 class="card-title"><%= report.user_name %> </h4>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="card-body">
-                                        <p class="card-text"><%= report.description %> </p>
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <p class="card-text"><%= report.description %> </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <% } %> 
-            <div class="row">
-                <div class="col-md-12">
-
-                </div>
-            </div>
+                <% } %> 
+            <% } %>
         </div>
     </section>

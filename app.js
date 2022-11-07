@@ -546,19 +546,14 @@ app.post("/donate/:id", async(req,res)=>{
             "select * from person where user_name = $1 ;", [req.session.user.username]
         )
        
-        
         const user_id = data.rows[0].user_id
-       
         
         const data1 = await client.query(
             "insert into donate(user_id, ngo_username,amount,pay_date) values($1, $2 , $3, $4) returning * "
             ,[ user_id ,id , amount , (year + "-" + month + "-" + day) ]
         )
-        const data2= await client.query(
-            "select * from donate where user_id = $1 and  ngo_username = $2 and amount = $3 and pay_date = $4 order by invoice_id DESC;"
-            ,[ user_id ,id , amount , (year + "-" + month + "-" + day) ]
-        )
-        const invoice= data2.rows[0]
+        
+        const invoice= data1.rows[0]
 
         res.render("ngo/donate_invoice",{invoice})
         }
