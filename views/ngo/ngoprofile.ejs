@@ -30,14 +30,14 @@
                             <p class="text-muted mb-4">
                                 <%= data.ngo.ngo_city %>, <%= data.ngo.ngo_state %>
                             </p>
-                            <% if(userLoggedIn.type=='A' ) { %>
+                            <% if(userLoggedIn && userLoggedIn.type=='A' ) { %>
                                 <div>
                                     <form class="col-md-12" action="/ngo/<%= data.ngo.ngo_username%>?_method=DELETE" method="post">
                                         <button class="btn btn-outline-danger col-md-6">Delete</button>
                                     </form>
                                 </div>
                             <% } %>
-                            <% if (userLoggedIn.type=='P' ) { %>
+                            <% if (userLoggedIn && userLoggedIn.type=='P' ) { %>
                                 <div class="row">
                                     <div class="d-flex justify-content-center mb-2">
                                         <a href="/member/<%= data.ngo.ngo_username%>" class="btn btn-success col-md-6">Connect</a>
@@ -90,7 +90,7 @@
                                     </div>
                                 </div>
                             <% } %>
-                            <% if (userLoggedIn.type=='N' && userLoggedIn.username==data.ngo.ngo_username ) { %>
+                            <% if (userLoggedIn && userLoggedIn.type=='N' && userLoggedIn.username==data.ngo.ngo_username ) { %>
                                 <div class="row">
                                     <% if(!data.ngo.verify) {%>
                                         <div class="d-flex justify-content-center mb-2">

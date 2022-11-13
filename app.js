@@ -347,40 +347,37 @@ app.get('/ngo', async(req,res)=>{
 app.get("/ngo/:id", async(req,res)=>{
     const { id } = req.params
     try{
-        if(!req.session.user){
-            res.redirect('/login')
-        }else{
-            const data2 = await client.query(
-                "select * from ngo where ngo_username = $1;", [id]
-            )
+        const data2 = await client.query(
+            "select * from ngo where ngo_username = $1;", [id]
+        )
 
-            if(data2.rows.length == 0){
-                res.sendStatus(403)
-            }
-            const ngo = data2.rows[0]
-
-            const data1 = await client.query(
-                "select * from drives where ngo_username = $1;", [id]
-            )
-
-            const data3 = await client.query(
-                "select p.user_name, r.description from report r, person p where r.ngo_username = $1 and r.user_id = p.user_id", [id]
-            )
-
-            const data4 = await client.query(
-                "select p.user_name, f.feedback from feedback f, person p where f.ngo_username = $1 and f.user_id = p.user_id", [id]
-            )
-
-            const drives = data1.rows;
-
-            const reports = data3.rows;
-
-            const feedbacks = data4.rows;
-
-            const data = {ngo, drives, reports, feedbacks};
-
-            res.render("ngo/ngoprofile",{data});
+        if(data2.rows.length == 0){
+            res.sendStatus(403)
         }
+        const ngo = data2.rows[0]
+
+        const data1 = await client.query(
+            "select * from drives where ngo_username = $1;", [id]
+        )
+
+        const data3 = await client.query(
+            "select p.user_name, r.description from report r, person p where r.ngo_username = $1 and r.user_id = p.user_id", [id]
+        )
+
+        const data4 = await client.query(
+            "select p.user_name, f.feedback from feedback f, person p where f.ngo_username = $1 and f.user_id = p.user_id", [id]
+        )
+
+        const drives = data1.rows;
+
+        const reports = data3.rows;
+
+        const feedbacks = data4.rows;
+
+        const data = {ngo, drives, reports, feedbacks};
+
+        res.render("ngo/ngoprofile",{data});
+        
     }catch(e){
         console.log(e)
         res.sendStatus(403)
