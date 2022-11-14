@@ -8,9 +8,7 @@ const client = require('./database/pgdatabase')
 const bcrypt = require('bcryptjs')
 const cors = require('cors');
 const emailService = require('./service/emailService');
-const { AuthenticationMD5Password } = require('pg-protocol/dist/messages');
 const pgSession = require('connect-pg-simple')(session);
-const { verify } = require('crypto');
 
 require('dotenv').config()
 
@@ -75,7 +73,11 @@ app.post("/registerNGO", async(req,res)=>{
 
     if(username == null || password == null || ngoName == null || ngoMail == null || phoneNumber == null || govtId == null || 
         add1==null || city == null || state == null || zipCode == null){
-            return res.sendStatus(403)
+            return res.send("Incorrect values entered")
+    }
+
+    if (phoneNumber < 6000000000 || phoneNumber > 9999999999) {
+        return res.redirect('/registerNGO')
     }
 
     try{
@@ -117,7 +119,7 @@ app.post("/registerNGO", async(req,res)=>{
 
     }catch(e){
         console.error(e.message)
-        return res.sendStatus(403)
+        return res.send(e)
     }
 })
 
@@ -130,7 +132,12 @@ app.post("/registerUser", async(req,res)=>{
     
     if (username == null || password == null || firstName == null || lastName == null || email == null || phnNumber == null ||
         gender == null || aadhaar == null || dateOfBirth == null || add1 == null || city == null || state == null || zipCode == null){
-            return res.sendStatus(403)
+            return res.send("Incorrect values entered")
+    }
+
+    if (phnNumber < 6000000000 || phnNumber > 9999999999) {
+        // req.flash('error','Phone number not valid')
+        return res.redirect('/registerUser')
     }
 
     try{
@@ -182,11 +189,11 @@ app.get("/login", (req,res) => {
     res.render("user/login");
 })
 
-app.post("/login", async(req,res)=>{
+app.post("/login", async(req,res,next)=>{
     const {username, password } = req.body;
 
-    if(username == null || password == null){
-        res.sendStatus(403)
+    if(!username || !password){
+        return req.send("error", "Username and password cannot be empty")
     }
     try{
         const data = await client.query(
@@ -200,8 +207,7 @@ app.post("/login", async(req,res)=>{
 
         const matches = bcrypt.compareSync(password, user.user_password)
         if(!matches) { 
-            res.send("Incorrect")
-            return res.sendStatus(403)
+            return res.send("Incorrect")
         }
 
         req.session.user = {
@@ -236,7 +242,7 @@ app.get("/drives", async(req,res) => {
     
         res.render('drives/index', {drives})
     }catch (e) {
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -273,7 +279,7 @@ app.get("/drives/:id", async(req,res)=>{
         
         res.render("drives/driveinfo",{drive})
     }catch (e){
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -293,7 +299,7 @@ app.get("/drives/:id/edit", async(req,res)=>{
         
         res.render("drives/edit",{drive})
     }catch (e){
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -340,7 +346,7 @@ app.get('/ngo', async(req,res)=>{
          
         res.render('ngo/viewNgo', {ngos})
     }catch (e) {
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -380,7 +386,7 @@ app.get("/ngo/:id", async(req,res)=>{
         
     }catch(e){
         console.log(e)
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -422,7 +428,7 @@ app.get("/person/:id", async(req,res) => {
         }
     }catch(e){
         console.log(e)
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -442,7 +448,7 @@ app.get('/person/:id/participating', async(req,res)=>{
          
         res.render('user/DrivesParticipation.ejs', {drives})
     }catch (e) {
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -457,7 +463,7 @@ app.get('/drives/:id/viewpaticipants', async(req,res)=>{
 
         res.render('drives/ViewParticipants', {persons})
     }catch (e) {
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -473,7 +479,7 @@ app.get("/viewmembers/:ngoUname", async(req,res)=>{
         
         res.render('ngo/viewmembers', {views})
     }catch (e) {
-        res.sendStatus(403)
+        res.send(e)
     }
 })
 
@@ -542,8 +548,8 @@ app.post("/donate/:id", async(req,res)=>{
     const month = today.getMonth()+1
     const year = today.getFullYear()
 
-    if(amount == null || amount<=0){
-        res.sendStatus(403)
+    if(!amount || amount<=0){
+        return res.send("Amount cannot be empty and must be more than 0")
 
     }
     try{
@@ -575,8 +581,8 @@ app.post("/feedback/:id", async(req,res)=>{
     const month = today.getMonth()+1
     const year = today.getFullYear()
 
-    if(feedback == null ){
-        res.sendStatus(403)
+    if(!feedback){
+        res.send("Feedback cannot be empty")
 
     }
     try{
@@ -601,8 +607,8 @@ app.post("/feedback/:id", async(req,res)=>{
 app.post("/report/:username", async(req,res)=>{
     const { username } = req.params
     const { Report } = req.body;
-    if(Report == null ){
-        res.sendStatus(403)
+    if(!Report){
+        res.send("Report description cannot be empty")
      }
     try{
         const data = await client.query(
@@ -647,7 +653,7 @@ app.post("/verify/:username", async(req,res)=>{
     const { username } = req.params
     const { OTP } = req.body;
     if(OTP == null ){
-        res.sendStatus(403)
+        res.send("OTP cannot be null")
     }
     const data = await client.query(
         "select * from superuser where user_name = $1 ;" , [username]
@@ -673,7 +679,7 @@ app.post("/verifyuser/:username", async(req,res)=>{
     const { username } = req.params
     const { OTP } = req.body;
     if(OTP == null ){
-        res.sendStatus(403)
+        res.send("OTP cannot be null")
     }
     const data = await client.query(
         "select * from superuser where user_name = $1 ;" , [username]
