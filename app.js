@@ -398,6 +398,10 @@ app.delete('/ngo/:id', async(req,res)=>{
             "delete from ngo where ngo_username = $1 returning *",[id]
         )
 
+        await client.query(
+            "delete from superuser where user_name = $1", [id]
+        ) 
+
     }catch(e){
         console.log(e)
     }
