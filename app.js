@@ -705,6 +705,43 @@ app.get("/", (req,res) => {
     res.render("home");
 })
 
+app.post("/search", async(req,res) => {
+    const { X } = req.body
+    res.send(X)
+    try{
+
+            const data = await client.query(
+
+                "select drive_id, from drives where drive_name Like '%$1%' or drive_name Like '$1%' or drive_name Like '%$1' or drive_location Like '%$1%' or drive_location Like '$1%' or drive_location Like '%$1' UNION select ngo_id from ngo where ngo_username Like '%$1%' or ngo_username Like '$1%' or ngo_username Like '%$1' or ngo_username Like '$1' or ngo_address Like '%$1%' or ngo_address Like '$1%' or ngo_address Like '%$1' or ngo_address Like '$1'; " , [X.query]
+
+            )
+            const ngo_data = await client.query(
+            "SELECT * from ngo where ngo_id exist in '$1';",[data.rows[0]]   
+            )
+            const drive_data = await client.query(
+                "SELECT * from drives where drive_id exist in '$1';",[data.rows[0]]   
+                )
+
+            if(data.rows.length == 0){
+                res.sendStatus(403)
+            }
+
+            const ngos = ngo_data.rows[0]
+            const drives = drive_data.rows[0]
+
+            res.render("/searchpage",{ngos, drives})
+
+        }
+            
+
+    catch(e){
+
+            console.error(e.message)
+
+        }
+
+    })
+
 app.listen(3000, ()=>{
     console.log("Listening on port 3000");
 })
