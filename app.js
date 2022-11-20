@@ -706,30 +706,38 @@ app.get("/", (req,res) => {
 })
 
 app.post("/search", async(req,res) => {
-    const { X } = req.body
-    res.send(X)
+    const { query } = req.body
+    // res.send(query)
     try{
 
-            const data = await client.query(
+            // const data = await client.query(
 
-                "select drive_id, from drives where drive_name Like '%$1%' or drive_name Like '$1%' or drive_name Like '%$1' or drive_location Like '%$1%' or drive_location Like '$1%' or drive_location Like '%$1' UNION select ngo_id from ngo where ngo_username Like '%$1%' or ngo_username Like '$1%' or ngo_username Like '%$1' or ngo_username Like '$1' or ngo_address Like '%$1%' or ngo_address Like '$1%' or ngo_address Like '%$1' or ngo_address Like '$1'; " , [X.query]
+            //     // "select drive_id from drives where drive_name Like '%$1%' or drive_name Like '$1%' or drive_name Like '%$1' or drive_location Like '%$1%' or drive_location Like '$1%' or drive_location Like '%$1'; " , [query]
 
-            )
+            // )
+            // res.send(data.rows[0])
+            // const ngo_data = await client.query(
+            // "SELECT * from ngo where ngo_id in (select ngo_id from ngo where ngo_username Like '%$1%' or ngo_username Like '$1%' or ngo_username Like '%$1' or ngo_username Like '$1' or ngo_address Like '%$1%' or ngo_address Like '$1%' or ngo_address Like '%$1' or ngo_address Like '$1');",[query]   
+            // )
+            // const drive_data = await client.query(
+            //     "SELECT * from drives where drive_id in (select drive_id from drives where drive_name Like '%$1%' or drive_name Like '$1%' or drive_name Like '%$1' or drive_location Like '%$1%' or drive_location Like '$1%' or drive_location Like '%$1'); " , [query]  
+            //     )
+
+            // if(data.rows.length == 0){
+            //     res.sendStatus(403)
+            // }
             const ngo_data = await client.query(
-            "SELECT * from ngo where ngo_id exist in '$1';",[data.rows[0]]   
-            )
-            const drive_data = await client.query(
-                "SELECT * from drives where drive_id exist in '$1';",[data.rows[0]]   
+                "SELECT * from ngo where ngo_username Like '$1' ", [query]   
                 )
+            res.send(ngo_data.rows)
+            //     const drive_data = await client.query(
+            //         "SELECT * from drives where drive_id like $1; " , [query]  
+            //         )
+            // const ngos = ngo_data.rows
+            // const drives = drive_data.rows
 
-            if(data.rows.length == 0){
-                res.sendStatus(403)
-            }
+            // res.render("user/searchpage",{ngos, drives})
 
-            const ngos = ngo_data.rows[0]
-            const drives = drive_data.rows[0]
-
-            res.render("/searchpage",{ngos, drives})
 
         }
             

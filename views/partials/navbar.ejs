@@ -16,6 +16,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/drives">Drives</a>
                 </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="/search">Search</a>
+                </li> -->
                 <% if (userLoggedIn && userLoggedIn.type=='N') { %>
                     <li class="nav-item">
                         <a class="nav-link" href="/drives/new">New Drive</a>
@@ -23,8 +26,9 @@
                 <% } %>
                 
             </ul>
+            
             <form class="form-inline" action="/search" method="post">
-                <input class="form-control" type="text" placeholder="Search" aria-label="Search NGO, Drives">
+                <input class="form-control" name=query type="text" placeholder="Search" aria-label="Search NGO, Drives">
               </form>
             <ul class="navbar-nav ms-auto">
                 <% if (!userLoggedIn) { %>
