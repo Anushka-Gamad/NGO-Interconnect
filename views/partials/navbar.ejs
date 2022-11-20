@@ -23,6 +23,9 @@
                 <% } %>
                 
             </ul>
+            <form class="form-inline" action="/search" method="post">
+                <input class="form-control" type="text" placeholder="Search" aria-label="Search NGO, Drives">
+              </form>
             <ul class="navbar-nav ms-auto">
                 <% if (!userLoggedIn) { %>
                     <li class="nav-item">
