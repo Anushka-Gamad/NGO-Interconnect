@@ -96,7 +96,7 @@ app.post("/registerNGO", async(req,res)=>{
             )
 
             if (data.rows.length === 0) {
-                res.sendStatus(403)
+                return res.sendStatus(403)
             }
 
             if(data2.rows.length ===0){
@@ -131,7 +131,7 @@ app.post("/registerUser", async(req,res)=>{
     const {username, password, firstName, middleName, lastName, email, phnNumber, gender, aadhaar, dateOfBirth, add1, add2, city, state, zipCode , userImage} = req.body;
     
     if (username == null || password == null || firstName == null || lastName == null || email == null || phnNumber == null ||
-        gender == null || aadhaar == null || dateOfBirth == null || add1 == null || city == null || state == null || zipCode == null){
+        gender == null || dateOfBirth == null || add1 == null || city == null || state == null || zipCode == null){
             return res.send("Incorrect values entered")
     }
 
@@ -155,12 +155,12 @@ app.post("/registerUser", async(req,res)=>{
                 ,[username, hashedPassword, 'P']
             )
             const data2 = await client.query(
-                "insert into person (user_name, user_aadhar, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14 , $15) returning *"
-                ,[username, aadhaar, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email,  add1+(add2?" "+add2:""), city, state, zipCode , userImage]
+                "insert into person (user_name, user_first_name, user_middle_name, user_last_name, user_date_of_birth, user_contact, user_age, user_gender, user_mail, user_address, user_city, user_state, user_zip_code , user_image) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) returning *"
+                ,[username, firstName, middleName, lastName, dateOfBirth, phnNumber, age, gender, email,  add1+(add2?" "+add2:""), city, state, zipCode , userImage]
             )
 
             if (data.rows.length === 0) {
-                res.sendStatus(403)
+                return res.sendStatus(403)
             }
 
             if(data2.rows.length ===0){
@@ -201,7 +201,7 @@ app.post("/login", async(req,res,next)=>{
         )
         
         if(data.rows.length == 0){
-            res.sendStatus(403)
+            return res.sendStatus(403)
         }
         const user = data.rows[0]
 
@@ -358,7 +358,7 @@ app.get("/ngo/:id", async(req,res)=>{
         )
 
         if(data2.rows.length == 0){
-            res.sendStatus(403)
+            return res.sendStatus(403)
         }
         const ngo = data2.rows[0]
 
@@ -418,7 +418,7 @@ app.get("/person/:id", async(req,res) => {
                 "select * from person where user_name = $1;", [id]
             )
             if(data0.rows.length == 0){
-                res.sendStatus(403)
+                return res.sendStatus(403)
             }
             const person = data0.rows[0]
             const data1 = await client.query(
@@ -586,7 +586,7 @@ app.post("/feedback/:id", async(req,res)=>{
     const year = today.getFullYear()
 
     if(!feedback){
-        res.send("Feedback cannot be empty")
+        return res.send("Feedback cannot be empty")
 
     }
     try{
@@ -612,7 +612,7 @@ app.post("/report/:username", async(req,res)=>{
     const { username } = req.params
     const { Report } = req.body;
     if(!Report){
-        res.send("Report description cannot be empty")
+        return res.send("Report description cannot be empty")
      }
     try{
         const data = await client.query(
