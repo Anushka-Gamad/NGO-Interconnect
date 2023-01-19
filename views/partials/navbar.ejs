@@ -27,10 +27,10 @@
                 
             </ul>
             
-            <form class="form-inline" action="/search" method="post">
-                <input class="form-control" name=query type="text" placeholder="Search" aria-label="Search NGO, Drives">
-              </form>
             <ul class="navbar-nav ms-auto">
+                <form class="d-flex " action="/search" method="post">
+                    <input class="form-control me-2" name="query" type="search" placeholder="Search" aria-label="Search NGO, Drives">
+                </form> 
                 <% if (!userLoggedIn) { %>
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>

@@ -712,24 +712,23 @@ app.get("/", (req,res) => {
 app.post("/search", async(req,res) => {
     const { query } = req.body
     try{
-            const ngo_data = await client.query(
-            "(select * from ngo where ngo_username Like $1 or ngo_name Like $1 or ngo_address Like $1);", ['%' + query + '%'] 
-            )
-            const drive_data = await client.query(
-                "(select * from drives where drive_name Like $1 or drive_location Like $1 or drive_description like $1 ); " , ['%' + query + '%']
-                )
+        const ngo_data = await client.query(
+            "(select * from ngo where ngo_name Like $1 or ngo_address Like $1);", ['%' + query + '%'] 
+        )
+        
+        const drive_data = await client.query(
+            "(select * from drives where drive_name Like $1 or drive_location Like $1 or drive_description like $1 or drive_type like $1 ); " , ['%' + query + '%']
+        )
 
-            const ngos = ngo_data.rows
-            const drives = drive_data.rows
+        const ngos = ngo_data.rows
+        const drives = drive_data.rows
 
-            res.render("user/searchpage",{ngos, drives})
-
-        }
+        res.render("user/searchpage",{ngos, drives})
+    }
     catch(e){
-
-            console.error(e.message)
-        }
-    })
+        console.error(e.message)
+    }
+})
 
 app.listen(3000, ()=>{
     console.log("Listening on port 3000");
